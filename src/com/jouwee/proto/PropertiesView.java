@@ -11,9 +11,9 @@ import javax.swing.JButton;
  */
 public class PropertiesView extends View {
 
-    // TODO: Testing code
-    public PropertiesView() {
-        super();
+    // TODO: Test code
+    public PropertiesView(Model model) {
+        super(model);
         setBackground(Color.red);
         setOpaque(true);
         

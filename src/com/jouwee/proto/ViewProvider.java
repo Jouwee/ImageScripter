@@ -1,5 +1,7 @@
 package com.jouwee.proto;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +20,7 @@ public final class ViewProvider {
     static {
         availableViews.add(PropertiesView.class);
         availableViews.add(ActionListView.class);
+        availableViews.add(ImageView.class);
     }
     
     /**
@@ -37,9 +40,13 @@ public final class ViewProvider {
      * @return View
      * @throws InstantiationException if there was an exception while creating the view
      * @throws IllegalAccessException if the view constructor is private or protected
+     * @throws java.lang.NoSuchMethodException
+     * @throws java.lang.reflect.InvocationTargetException
      */
-    public static <T extends View> T getNewInstance(Class<T> viewType) throws InstantiationException, IllegalAccessException {
-        return viewType.newInstance();
+    public static <T extends View> T getNewInstance(Class<T> viewType) throws InstantiationException, IllegalAccessException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
+        Constructor<T> constructor = viewType.getConstructor(Model.class);
+        T instance = constructor.newInstance(Model.def());
+        return instance;
     }
     
 }

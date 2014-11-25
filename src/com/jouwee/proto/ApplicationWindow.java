@@ -44,6 +44,7 @@ public class ApplicationWindow extends JFrame {
     private void setupWindow() {
         setTitle(LocaleBundle.def().getString("mainwindow.title"));
         setExtendedState(MAXIMIZED_BOTH);
+        setSize(800, 600);
     }
     
 }

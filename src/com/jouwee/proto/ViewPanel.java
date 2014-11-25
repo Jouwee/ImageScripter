@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeSupport;
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.BoxLayout;
@@ -56,9 +57,15 @@ public class ViewPanel extends JPanel {
     
     /**
      * Updates the view contained in the panel to represent the current defined view
+     * 
+     * @param oldView The old view to be removed
+     * @param newView The new view to be added
      */
-    private void updateView() {
-        add(view, BorderLayout.CENTER);
+    private void updateView(View oldView, View newView) {
+        if(oldView != null) {
+            remove(oldView);
+        }
+        add(newView, BorderLayout.CENTER);
         revalidate();        
         repaint();        
     }
@@ -82,7 +89,7 @@ public class ViewPanel extends JPanel {
         this.view = view;
         propertyChangeSupport.firePropertyChange(PROP_VIEW, oldView, view);
         // Updates the view contained in the panel
-        updateView();
+        updateView(oldView, view);
     }
     
     /**
@@ -95,7 +102,7 @@ public class ViewPanel extends JPanel {
             try {
                 Class viewType = (Class) e.getItem();
                 setView(ViewProvider.getNewInstance(viewType));
-            } catch (InstantiationException | IllegalAccessException ex) {
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException | InvocationTargetException ex) {
                 // TODO: Default error handling
                 ex.printStackTrace();
             }

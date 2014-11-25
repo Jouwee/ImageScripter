@@ -1,23 +1,29 @@
 package com.jouwee.proto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * THe project that the user is currently working on
+ * The project. This is non-volatile data
  * 
  * @author Jouwee
  */
 public class Project {
     
     /** Action list */
-    private final List<Action> actionList;
+    private final ActionList actionList;
 
     /**
      * Creates a new project
      */
     public Project() {
-        this.actionList = new ArrayList<>();
+        this.actionList = new ActionList();
+    }
+    
+    /**
+     * Returns the list of actions
+     * 
+     * @return ActionList
+     */
+    public ActionList getActionList() {
+        return actionList;
     }
     
 }
