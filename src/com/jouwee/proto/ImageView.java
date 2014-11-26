@@ -39,9 +39,9 @@ public class ImageView extends View {
      */
     private void setupImageLabel() {
         
-        BufferedImage outputImage = (BufferedImage) getModel().getState().get("outputImage");
+        Image outputImage = (Image) getModel().getState().get("outputImage");
         
-        image = new JLabel(new ImageIcon(outputImage.getSubimage(0, 0, outputImage.getWidth(), outputImage.getHeight())));
+        image = new JLabel(new ImageIcon(outputImage.getBufferedImage().getSubimage(0, 0, outputImage.getWidth(), outputImage.getHeight())));
     }
     
     /**

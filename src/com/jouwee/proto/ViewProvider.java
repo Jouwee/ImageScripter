@@ -16,7 +16,7 @@ public final class ViewProvider {
     /** List of avaliable views */
     private static final List<Class> availableViews = new ArrayList<>();
 
-    // TODO: Find a way to correctly load the available view
+    // TODO: Find a way to correctly load the available views
     static {
         availableViews.add(PropertiesView.class);
         availableViews.add(ActionListView.class);
