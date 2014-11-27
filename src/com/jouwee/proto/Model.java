@@ -38,7 +38,6 @@ public class Model {
     // TODO: Test data
     private void createTestData() {
         project.getActionList().add(new TestFilterBinarize());
-        project.getActionList().add(new TestFilterBinarize());
         
         try {
             state.set("inputImage", ImageFactory.fromFile(new File("D:\\Imagens\\Wallpaper\\VideoGames\\BF4-Menu.jpg")));

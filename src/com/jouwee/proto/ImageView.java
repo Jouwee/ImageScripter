@@ -1,17 +1,17 @@
 package com.jouwee.proto;
 
 import java.awt.BorderLayout;
-import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JList;
 
 /**
  * View for images
  * 
  * @author Jouwee
  */
-public class ImageView extends View {
+public class ImageView extends View implements PropertyChangeListener {
 
     /** Image */
     private JLabel image;
@@ -32,16 +32,25 @@ public class ImageView extends View {
     private void initGui() {
         setupImageLabel();
         setupViewAndPlaceComponents();
+        getModel().getState().addPropertyChangeListener("outputImage", this);
     }
     
     /**
      * Sets up the image label
      */
     private void setupImageLabel() {
-        
+        image = new JLabel();
+        updateImage();
+    }
+    
+    /**
+     * Update the image
+     */
+    private void updateImage() {
         Image outputImage = (Image) getModel().getState().get("outputImage");
-        
-        image = new JLabel(new ImageIcon(outputImage.getBufferedImage().getSubimage(0, 0, outputImage.getWidth(), outputImage.getHeight())));
+        image.setIcon(new ImageIcon(outputImage.getBufferedImage().getSubimage(0, 0, outputImage.getWidth(), outputImage.getHeight())));
+        revalidate();
+        repaint();
     }
     
     /**
@@ -50,6 +59,11 @@ public class ImageView extends View {
     private void setupViewAndPlaceComponents() {
         setLayout(new BorderLayout());
         add(image);
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        updateImage();
     }
     
 }

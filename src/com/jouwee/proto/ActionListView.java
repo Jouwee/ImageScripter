@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import javax.swing.JList;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  * Action list view
@@ -38,6 +40,12 @@ public class ActionListView extends View {
      */
     private void setupList() {
         list = new JList(new ActionJListModel());
+        list.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                getModel().getState().set("selectedAction", list.getSelectedValue());
+            }
+        });
     }
     
     /**
