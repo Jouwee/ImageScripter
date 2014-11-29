@@ -6,6 +6,7 @@
 
 package com.jouwee.proto;
 
+import com.jouwee.proto.annotations.Property;
 import java.awt.Color;
 
 /**
@@ -18,22 +19,27 @@ public class TestFilterBinarize extends Iterator {
     @Property(name = "Threshold")
     private int threshold;
 
+    public TestFilterBinarize() {
+        threshold = 128;
+    }
+
+    
+    
     @Override
     public Image process(Image image) {
-        System.out.println("threshold: " + threshold);
-        return super.process(image); //To change body of generated methods, choose Tools | Templates.
+        return super.process(image);
     }
 
     
     
     @Override
     public void iteratePixel(int x, int y) {
-        Color c = new Color(getOriginalImage().getPixelRGB(x, y));
+        Color c = new Color(getOriginalImage().getPixelValue(x, y));
         int m = (c.getRed() + c.getBlue() + c.getGreen()) / 3;
         if(m < threshold) {
-            getNewImage().setPixelRGB(x, y, 0);
+            getNewImage().setPixelValue(x, y, 0);
         } else {
-            getNewImage().setPixelRGB(x, y, 0xFFFFFF);
+            getNewImage().setPixelValue(x, y, 0xFFFFFF);
         }
     }
 

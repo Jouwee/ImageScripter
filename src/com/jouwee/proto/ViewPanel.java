@@ -5,28 +5,25 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-import javax.swing.event.ListDataListener;
 
 /**
  * The container panel for views
  * 
  * @author Jouwee
  */
-public class ViewPanel extends JPanel {
+public class ViewPanel extends JPanel implements Interface {
     
     /** Property - Current view */
     public static final String PROP_VIEW = "PROP_VIEW";
-    /** Current view for this panel */
-    private View view;
     /** Property change support */
     private final transient PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
+    /** View selector */
+    private ViewSelector viewSelector;
+    /** Current view for this panel */
+    private View view;
     
     /**
      * Creates a new View Panel
@@ -41,18 +38,40 @@ public class ViewPanel extends JPanel {
      * Initializes the graphics user interface
      */
     private void initGui() {
-        setLayout(new BorderLayout());
-        
+        setupViewSelector();
+        JPanel pViewInfo = setupViewInfoPanel();
+        setupViewPanel(pViewInfo);
+    }
+
+    /**
+     * Sets up the view selector
+     */
+    private void setupViewSelector() {
+        viewSelector = new ViewSelector();
+        viewSelector.addItemListener(new ViewSeletorListener());
+    }
+
+    /**
+     * Sets up the view info panel
+     * 
+     * @return 
+     */
+    private JPanel setupViewInfoPanel() {
         JPanel pViewInfo = new JPanel();
         pViewInfo.setLayout(new BoxLayout(pViewInfo, BoxLayout.X_AXIS));
-        
-        JComboBox<Class<? extends View>> fViewSelector = new JComboBox<>(new ViewSeletorModel());
-        fViewSelector.addItemListener(new ViewSeletorListener());
-        
-        pViewInfo.add(fViewSelector);
-        
+        pViewInfo.add(viewSelector);
+        return pViewInfo;
+    }
+
+    /**
+     * Sets up the view panel
+     * 
+     * @param pViewInfo 
+     */
+    private void setupViewPanel(JPanel pViewInfo) {
+        setLayout(new BorderLayout());
+        setBorder(BorderFactory.createEmptyBorder(SPACE_SM, SPACE_SM, SPACE_SM, SPACE_SM));
         add(pViewInfo, BorderLayout.SOUTH);
-        
     }
     
     /**
@@ -66,6 +85,7 @@ public class ViewPanel extends JPanel {
             remove(oldView);
         }
         add(newView, BorderLayout.CENTER);
+        viewSelector.setSelectedItem(newView.getClass());
         revalidate();        
         repaint();        
     }
@@ -106,47 +126,6 @@ public class ViewPanel extends JPanel {
                 // TODO: Default error handling
                 ex.printStackTrace();
             }
-        }
-        
-    }
-    
-    /**
-     * Combobox model for the view selector
-     */
-    private class ViewSeletorModel implements ComboBoxModel<Class<? extends View>> {
-
-        /** Current view type */
-        private Class currentViewType;
-        
-        @Override
-        public void setSelectedItem(Object anItem) {
-            if(!(anItem instanceof Class)) {
-                throw new IllegalStateException(LocaleBundle.def().getString("exceptions.illegalViewType"));
-            }
-            currentViewType = (Class) anItem;
-        }
-
-        @Override
-        public Object getSelectedItem() {
-            return currentViewType;
-        }
-
-        @Override
-        public int getSize() {
-            return ViewProvider.getAvailableViews().size();
-        }
-
-        @Override
-        public Class getElementAt(int index) {
-            return ViewProvider.getAvailableViews().get(index);
-        }
-
-        @Override
-        public void addListDataListener(ListDataListener l) {
-        }
-
-        @Override
-        public void removeListDataListener(ListDataListener l) {
         }
         
     }

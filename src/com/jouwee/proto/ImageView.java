@@ -1,5 +1,6 @@
 package com.jouwee.proto;
 
+import com.jouwee.proto.annotations.ViewMeta;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -11,6 +12,7 @@ import javax.swing.JLabel;
  * 
  * @author Jouwee
  */
+@ViewMeta(name = "Image viewer")
 public class ImageView extends View implements PropertyChangeListener {
 
     /** Image */

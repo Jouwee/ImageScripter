@@ -1,5 +1,6 @@
 package com.jouwee.proto;
 
+import com.jouwee.proto.annotations.ViewMeta;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -16,6 +17,7 @@ import javax.swing.event.DocumentListener;
  * 
  * @author Jouwee
  */
+@ViewMeta(name = "Property Editor")
 public class PropertiesView extends View implements PropertyChangeListener {
 
     /**
@@ -97,7 +99,6 @@ public class PropertiesView extends View implements PropertyChangeListener {
                         }
                         private void update() {
                             try {
-                                System.out.println(Integer.parseInt(fi.getText()));
                                 desc.getWriteMethod().invoke(getCurrentAction(), Integer.parseInt(fi.getText()));
                                 getModel().getScriptRunner().run();
                             } catch(Exception e) {

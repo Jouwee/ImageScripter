@@ -16,12 +16,26 @@ public abstract class Iterator extends Processor {
     public Image process(Image image) {
         originalImage = image;
         newImage = new Image(image.getWidth(), image.getHeight());
+        beforeProcessing();
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
                 iteratePixel(x, y);
             }
         }
+        afterProcessing();
         return newImage;
+    }
+
+    /**
+     * Callback for before processing
+     */
+    public void beforeProcessing() {
+    }
+    
+    /**
+     * Callback for after processing
+     */
+    public void afterProcessing() {
     }
     
     /**

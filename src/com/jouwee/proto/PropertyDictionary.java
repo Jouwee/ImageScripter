@@ -1,5 +1,6 @@
 package com.jouwee.proto;
 
+import com.jouwee.proto.annotations.Property;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;

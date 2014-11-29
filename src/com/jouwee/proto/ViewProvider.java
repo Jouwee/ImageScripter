@@ -21,6 +21,7 @@ public final class ViewProvider {
         availableViews.add(PropertiesView.class);
         availableViews.add(ActionListView.class);
         availableViews.add(ImageView.class);
+        availableViews.add(ActionBrowserView.class);
     }
     
     /**

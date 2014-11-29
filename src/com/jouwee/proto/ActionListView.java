@@ -1,8 +1,14 @@
 package com.jouwee.proto;
 
+import com.jouwee.proto.annotations.ViewMeta;
+import com.jouwee.proto.listeners.ListEvent;
+import com.jouwee.proto.listeners.ListListener;
 import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JList;
 import javax.swing.ListModel;
+import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -12,6 +18,7 @@ import javax.swing.event.ListSelectionListener;
  * 
  * @author Jouwee
  */
+@ViewMeta(name = "Action list")
 public class ActionListView extends View {
 
     /** Swing list to show the actions */
@@ -59,8 +66,20 @@ public class ActionListView extends View {
     /**
      * Returns the action list model
      */
-    private class ActionJListModel implements ListModel<Action> {
+    private class ActionJListModel implements ListModel<Action>, ListListener {
 
+        /** List data listeners */
+        private final List<ListDataListener> listDataListeners;
+
+        /**
+         * Creates a new action list model
+         */
+        @SuppressWarnings("LeakingThisInConstructor")
+        public ActionJListModel() {
+            listDataListeners = new ArrayList<>();
+            getModel().getProject().getActionList().addListListener(this);
+        }
+        
         @Override
         public int getSize() {
             return getModel().getProject().getActionList().getSize();
@@ -73,12 +92,20 @@ public class ActionListView extends View {
 
         @Override
         public void addListDataListener(ListDataListener l) {
-            // TODO: Must support?
+            listDataListeners.add(l);
         }
 
         @Override
         public void removeListDataListener(ListDataListener l) {
-            // TODO: Must support?
+            listDataListeners.remove(l);
+        }
+
+        @Override
+        public void itemAdded(ListEvent e) {
+            ListDataEvent ev = new ListDataEvent(e.getSource(), ListDataEvent.INTERVAL_ADDED, e.getIndex(), e.getIndex());
+            for (ListDataListener listener : listDataListeners) {
+                listener.intervalAdded(ev);
+            }
         }
         
     }
