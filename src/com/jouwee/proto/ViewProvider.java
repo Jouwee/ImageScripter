@@ -22,6 +22,7 @@ public final class ViewProvider {
         availableViews.add(ActionListView.class);
         availableViews.add(ImageView.class);
         availableViews.add(ActionBrowserView.class);
+        availableViews.add(ScriptEditorView.class);
     }
     
     /**

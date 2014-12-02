@@ -19,6 +19,7 @@ public class AverageGrayscale extends Filter {
 
     @Override
     public void beforeProcessing() {
+        super.beforeProcessing();
         getNewImage().setChannels(Image.CHANNELS_GRAYSCALE);
     }
     
