@@ -1,12 +1,17 @@
 package com.jouwee.proto;
 
+import com.jouwee.proto.annotations.ActionMeta;
 import com.jouwee.proto.annotations.ViewMeta;
 import com.jouwee.proto.listeners.ListEvent;
 import com.jouwee.proto.listeners.ListListener;
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
@@ -47,6 +52,7 @@ public class ActionListView extends View {
      */
     private void setupList() {
         list = new JList(new ActionJListModel());
+        list.setCellRenderer(new ActionCellRenderer());
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -61,6 +67,29 @@ public class ActionListView extends View {
     private void setupViewAndPlaceComponents() {
         setLayout(new BorderLayout());
         add(list);
+    }
+    
+    /**
+     * List cell renderer for actions
+     */
+    private class ActionCellRenderer implements ListCellRenderer<Action> {
+
+        @Override
+        public Component getListCellRendererComponent(JList<? extends Action> list, Action value, int index, boolean isSelected, boolean cellHasFocus) {
+            JLabel l = new JLabel();
+            if (isSelected) {
+                l.setOpaque(true);
+                l.setBackground(new Color(0x99CCFF));
+            }
+            
+            if (value.getClass().isAnnotationPresent(ActionMeta.class)) {
+                ActionMeta meta = value.getClass().getAnnotation(ActionMeta.class);
+                l.setText(meta.name());
+            }
+            
+            return l;
+        }
+
     }
     
     /**

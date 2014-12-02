@@ -4,8 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.Scriptable;
+import org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel;
 
 /**
  * Main class for the application
@@ -34,8 +33,9 @@ public class Application {
      */
     private static void setupLookAndFeel() {
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(new SubstanceGraphiteLookAndFeel());
+        } catch (UnsupportedLookAndFeelException ex) {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

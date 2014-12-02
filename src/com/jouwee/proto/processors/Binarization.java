@@ -6,12 +6,14 @@ package com.jouwee.proto.processors;
 
 import com.jouwee.proto.Filter;
 import com.jouwee.proto.Image;
+import com.jouwee.proto.annotations.ActionMeta;
 
 /**
  * Binarization filter
  *
  * @author Jouwee
  */
+@ActionMeta(name = "Binarization")
 public class Binarization extends Filter {
 
     @Override

@@ -27,23 +27,12 @@ public class ApplicationWindow extends JFrame {
      */
     private void initGui() {
         setupWindow();
-        // TODO: Load from somewhere
-        try {
-            // Sets up a few view panels
-            ViewPanel pLeft = new ViewPanel();
-            pLeft.setView(ViewProvider.getNewInstance(ActionListView.class));
-            ViewPanel pCenter = new ViewPanel();
-            pCenter.setView(ViewProvider.getNewInstance(ImageView.class));
-            ViewPanel pRight = new ViewPanel();
-            pRight.setView(ViewProvider.getNewInstance(PropertiesView.class));
-            // Build the interface
-            getContentPane().setLayout(new BorderLayout());
-            getContentPane().add(pLeft, BorderLayout.WEST);
-            getContentPane().add(pCenter, BorderLayout.CENTER);
-            getContentPane().add(pRight, BorderLayout.EAST);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        // Build the interface
+        getContentPane().setLayout(new BorderLayout());
+        
+        ViewPanelContainer container = new ViewPanelContainer();
+        container.loadFrom(Application.class.getResourceAsStream("layout_default.xml"));
+        getContentPane().add(container);
     }
     
     /**

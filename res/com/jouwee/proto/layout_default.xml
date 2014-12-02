@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <container split="horizontal">
+        <view>
+            <class>com.jouwee.proto.ActionListView</class>
+        </view>
+        <view>
+            <class>com.jouwee.proto.ImageView</class>
+        </view>
+        <view>
+            <class>com.jouwee.proto.PropertiesView</class>
+        </view>
+    </container>
+</layout>
