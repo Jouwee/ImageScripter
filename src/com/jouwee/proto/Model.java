@@ -5,11 +5,11 @@ import java.io.File;
 
 /**
  * Model for the application
- * 
+ *
  * @author Jouwee
  */
 public class Model {
-    
+
     // TODO: Should not be a singleton, but who would have it?
     /** Model singleton */
     private static final Model instance;
@@ -31,26 +31,31 @@ public class Model {
         this.project = new Project();
         this.state = new State();
         this.scriptRunner = new ScriptRunner(this);
-        
+
         // TODO: Test data
         createTestData();
     }
-    
+
     // TODO: Test data
     private void createTestData() {
         project.getActionList().add(new AverageGrayscale());
-        
+
         try {
             state.set("inputImage", ImageFactory.fromFile(new File("D:\\Imagens\\Wallpaper\\VideoGames\\BF4-Menu.jpg")));
             state.set("outputImage", ImageFactory.fromFile(new File("D:\\Imagens\\Wallpaper\\VideoGames\\BF4-Menu.jpg")));
         } catch(Exception ex)  {
-            ex.printStackTrace();
+            try {
+                state.set("inputImage", ImageFactory.fromFile(new File("c:\\TMP\\criancas_brincando.jpeg")));
+                state.set("outputImage", ImageFactory.fromFile(new File("c:\\TMP\\criancas_brincando.jpeg")));
+            } catch(Exception ex2)  {
+                ex.printStackTrace();
+            }
         }
     }
-    
+
     /**
      * Returns the singleton's instance
-     * 
+     *
      * @return Model
      */
     public static Model def() {
@@ -59,7 +64,7 @@ public class Model {
 
     /**
      * Returns the project
-     * 
+     *
      * @return Project
      */
     public Project getProject() {
@@ -68,7 +73,7 @@ public class Model {
 
     /**
      * Returns the state of the application
-     * 
+     *
      * @return State
      */
     public State getState() {
@@ -77,11 +82,11 @@ public class Model {
 
     /**
      * Returns the script runner
-     * 
+     *
      * @return ScriptRunner
      */
     public ScriptRunner getScriptRunner() {
         return scriptRunner;
     }
-    
+
 }
