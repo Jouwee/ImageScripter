@@ -1,5 +1,8 @@
-package com.jouwee.proto;
+package com.jouwee.proto.view;
 
+import com.jouwee.proto.Action;
+import com.jouwee.proto.Model;
+import com.jouwee.proto.Scriptable;
 import com.jouwee.proto.annotations.ViewMeta;
 import java.awt.BorderLayout;
 import java.awt.Font;

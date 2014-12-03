@@ -1,18 +1,24 @@
-package com.jouwee.proto;
+package com.jouwee.proto.view;
 
+import com.jouwee.proto.Action;
+import com.jouwee.proto.Interface;
+import static com.jouwee.proto.Interface.LOWLIGHT_COLOR;
+import com.jouwee.proto.Model;
 import com.jouwee.proto.annotations.ActionMeta;
 import com.jouwee.proto.annotations.ViewMeta;
 import com.jouwee.proto.listeners.ListEvent;
 import com.jouwee.proto.listeners.ListListener;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
+import javax.swing.border.Border;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
@@ -24,7 +30,7 @@ import javax.swing.event.ListSelectionListener;
  * @author Jouwee
  */
 @ViewMeta(name = "Action list")
-public class ActionListView extends View {
+public class ActionListView extends View implements Interface {
 
     /** Swing list to show the actions */
     private JList list;
@@ -76,10 +82,10 @@ public class ActionListView extends View {
 
         @Override
         public Component getListCellRendererComponent(JList<? extends Action> list, Action value, int index, boolean isSelected, boolean cellHasFocus) {
-            JLabel l = new JLabel();
+            JLabel l = new ActionListCell();
             if (isSelected) {
                 l.setOpaque(true);
-                l.setBackground(new Color(0x99CCFF));
+                l.setBackground(SELECTION_COLOR);
             }
             
             if (value.getClass().isAnnotationPresent(ActionMeta.class)) {
@@ -90,6 +96,22 @@ public class ActionListView extends View {
             return l;
         }
 
+    }
+    
+    /**
+     * Action list cell
+     */
+    private class ActionListCell extends JLabel {
+
+        /**
+         * Create a new action list cell
+         */
+        public ActionListCell() {
+            super();
+            setPreferredSize(new Dimension(20, 50));
+            setBorder(BorderFactory.createLineBorder(LOWLIGHT_COLOR));
+        }
+        
     }
     
     /**

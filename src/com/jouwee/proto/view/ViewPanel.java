@@ -1,5 +1,6 @@
-package com.jouwee.proto;
+package com.jouwee.proto.view;
 
+import com.jouwee.proto.Interface;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;

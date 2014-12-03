@@ -1,5 +1,11 @@
-package com.jouwee.proto;
+package com.jouwee.proto.view;
 
+import com.jouwee.proto.Model;
+import com.jouwee.proto.view.PropertiesView;
+import com.jouwee.proto.view.ActionListView;
+import com.jouwee.proto.view.ActionBrowserView;
+import com.jouwee.proto.view.ScriptEditorView;
+import com.jouwee.proto.view.ImageView;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

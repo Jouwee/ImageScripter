@@ -1,5 +1,6 @@
-package com.jouwee.proto;
+package com.jouwee.proto.view;
 
+import com.jouwee.proto.Model;
 import javax.swing.JComponent;
 
 /**

@@ -1,6 +1,7 @@
 package com.jouwee.proto;
 
 import com.jouwee.proto.processors.AverageGrayscale;
+import com.jouwee.proto.processors.Binarization;
 import java.io.File;
 
 /**
@@ -38,6 +39,8 @@ public class Model {
 
     // TODO: Test data
     private void createTestData() {
+        project.getActionList().add(new AverageGrayscale());
+        project.getActionList().add(new Binarization());
         project.getActionList().add(new AverageGrayscale());
 
         try {

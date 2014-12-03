@@ -1,5 +1,6 @@
 package com.jouwee.proto;
 
+import com.jouwee.proto.view.ViewPanelContainer;
 import java.awt.BorderLayout;
 import java.awt.HeadlessException;
 import javax.swing.JFrame;

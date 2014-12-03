@@ -1,4 +1,4 @@
-package com.jouwee.proto;
+package com.jouwee.proto.view;
 
 import java.awt.BorderLayout;
 import java.io.InputStream;

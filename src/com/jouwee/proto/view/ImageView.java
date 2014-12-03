@@ -1,5 +1,7 @@
-package com.jouwee.proto;
+package com.jouwee.proto.view;
 
+import com.jouwee.proto.Image;
+import com.jouwee.proto.Model;
 import com.jouwee.proto.annotations.ViewMeta;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;

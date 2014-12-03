@@ -1,5 +1,6 @@
-package com.jouwee.proto;
+package com.jouwee.proto.view;
 
+import com.jouwee.proto.LocaleBundle;
 import com.jouwee.proto.annotations.ViewMeta;
 import java.awt.Color;
 import java.awt.Component;
