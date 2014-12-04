@@ -63,7 +63,6 @@ public class ViewPanelContainer extends JPanel {
                 }
             }
         } catch(Exception e) {
-            // TODO: Default error handling
             e.printStackTrace();
         }
     }

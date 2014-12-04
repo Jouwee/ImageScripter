@@ -1,10 +1,13 @@
 package com.jouwee.proto.view;
 
 import com.jouwee.proto.ActionProvider;
+import com.jouwee.proto.ExceptionHandler;
 import com.jouwee.proto.Model;
 import com.jouwee.proto.annotations.ViewMeta;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -81,7 +84,9 @@ public class ActionBrowserView extends View {
             try {
                 getModel().getProject().getActionList().add(ActionProvider.getNewInstance(list.getSelectedValue()));
             } catch(IllegalAccessException | InstantiationException ex) {
-                // TODO: Default error handling
+                Map<String, Object> errorInfo = new HashMap<>();
+                errorInfo.put("actionClass", list.getSelectedValue());
+                ExceptionHandler.handle(ex, "Was not able to add an action to the list", errorInfo);
             }
         }
         

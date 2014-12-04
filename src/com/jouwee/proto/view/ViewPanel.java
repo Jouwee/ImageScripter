@@ -1,12 +1,14 @@
 package com.jouwee.proto.view;
 
+import com.jouwee.proto.ExceptionHandler;
 import com.jouwee.proto.Interface;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
-import javax.swing.BorderFactory;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
@@ -71,7 +73,6 @@ public class ViewPanel extends JPanel implements Interface {
      */
     private void setupViewPanel(JPanel pViewInfo) {
         setLayout(new BorderLayout());
-        setBorder(BorderFactory.createEmptyBorder(SPACE_SM, SPACE_SM, SPACE_SM, SPACE_SM));
         add(pViewInfo, BorderLayout.SOUTH);
     }
     
@@ -120,12 +121,13 @@ public class ViewPanel extends JPanel implements Interface {
 
         @Override
         public void itemStateChanged(ItemEvent e) {
+            Class viewType = (Class) e.getItem();
             try {
-                Class viewType = (Class) e.getItem();
                 setView(ViewProvider.getNewInstance(viewType));
             } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | IllegalArgumentException | InvocationTargetException ex) {
-                // TODO: Default error handling
-                ex.printStackTrace();
+                Map<String, Object> errorInfo = new HashMap<>();
+                errorInfo.put("viewType", viewType);
+                ExceptionHandler.handle(ex, "Was not able to create a new view", errorInfo);
             }
         }
         
