@@ -1,11 +1,7 @@
 package com.jouwee.proto.view;
 
+import com.jouwee.proto.Application;
 import com.jouwee.proto.Model;
-import com.jouwee.proto.view.PropertiesView;
-import com.jouwee.proto.view.ActionListView;
-import com.jouwee.proto.view.ActionBrowserView;
-import com.jouwee.proto.view.ScriptEditorView;
-import com.jouwee.proto.view.ImageView;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -14,7 +10,7 @@ import java.util.List;
 
 /**
  * Provider class for views
- * 
+ *
  * @author Jouwee
  */
 public final class ViewProvider {
@@ -30,19 +26,19 @@ public final class ViewProvider {
         availableViews.add(ActionBrowserView.class);
         availableViews.add(ScriptEditorView.class);
     }
-    
+
     /**
      * Returns an unmodifiable list of available views
-     * 
+     *
      * @return {@code List<Class>}
      */
     public static List<Class> getAvailableViews() {
         return Collections.unmodifiableList(availableViews);
     }
-    
+
     /**
      * Returns a new instance of the specified {@code viewType}
-     * 
+     *
      * @param <T> View type
      * @param viewType View type
      * @return View
@@ -53,8 +49,8 @@ public final class ViewProvider {
      */
     public static <T extends View> T getNewInstance(Class<T> viewType) throws InstantiationException, IllegalAccessException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
         Constructor<T> constructor = viewType.getConstructor(Model.class);
-        T instance = constructor.newInstance(Model.def());
+        T instance = constructor.newInstance(Application.getModel());
         return instance;
     }
-    
+
 }

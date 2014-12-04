@@ -11,13 +11,6 @@ import java.io.File;
  */
 public class Model {
 
-    // TODO: Should not be a singleton, but who would have it?
-    /** Model singleton */
-    private static final Model instance;
-    static{
-        instance = new Model();
-        instance.scriptRunner.run();
-    }
     /** Project */
     private final Project project;
     /** State of the application */
@@ -54,15 +47,6 @@ public class Model {
                 ex.printStackTrace();
             }
         }
-    }
-
-    /**
-     * Returns the singleton's instance
-     *
-     * @return Model
-     */
-    public static Model def() {
-        return instance;
     }
 
     /**

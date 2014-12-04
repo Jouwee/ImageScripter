@@ -9,17 +9,25 @@ import org.pushingpixels.substance.api.skin.SubstanceGraphiteLookAndFeel;
 
 /**
  * Main class for the application
- * 
+ *
  * @author Jouwee
  */
 public class Application {
-    
+
+    /** Current model for the application */
+    private static Model model;
+    /** Application controller */
+    private static ApplicationController controller;
+
     /**
      * Main application method
-     * 
-     * @param args 
+     *
+     * @param args
      */
     public static void main(String[] args) {
+        // Creates the model
+        model = new Model();
+        controller = new ApplicationController();
         // Sets up the Look and Feel for the application
         setupLookAndFeel();
         SwingUtilities.invokeLater(new Runnable() {
@@ -33,7 +41,7 @@ public class Application {
             }
         });
     }
-    
+
     /**
      * Sets up the Look and Feel for the application
      */
@@ -44,5 +52,32 @@ public class Application {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
+    /**
+     * Returns the model
+     *
+     * @return Model
+     */
+    public static Model getModel() {
+        return model;
+    }
+
+    /**
+     * Sets the model
+     *
+     * @param model
+     */
+    public static void setModel(Model model) {
+        Application.model = model;
+    }
+
+    /**
+     * Return the applcation controller
+     *
+     * @return ApplicationController
+     */
+    public static ApplicationController getController() {
+        return controller;
+    }
+
 }
