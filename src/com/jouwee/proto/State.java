@@ -4,6 +4,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * State of the application. This is the volatile data
@@ -23,6 +25,19 @@ public class State {
     public State() {
         keyValue = new HashMap<>();
         propertyChangeSupport = new PropertyChangeSupport(this);
+    }
+    
+    /**
+     * Clears the state
+     */
+    public void clear() {
+        // Old entry set for event firing
+        Set<Entry<String, Object>> oldEntrySet = keyValue.entrySet();
+        keyValue.clear();
+        // Fires the events
+        for (Entry<String, Object> entry : oldEntrySet) {
+            propertyChangeSupport.firePropertyChange(entry.getKey(), entry.getValue(), null);
+        }
     }
     
     /**

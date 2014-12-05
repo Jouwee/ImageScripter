@@ -1,6 +1,7 @@
 package com.jouwee.proto.view;
 
 import com.jouwee.proto.Action;
+import com.jouwee.proto.ActionList;
 import com.jouwee.proto.Interface;
 import static com.jouwee.proto.Interface.LOWLIGHT_COLOR;
 import com.jouwee.proto.Model;
@@ -18,7 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
-import javax.swing.border.Border;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
@@ -40,6 +40,7 @@ public class ActionListView extends View implements Interface {
      * 
      * @param model
      */
+    @SuppressWarnings("LeakingThisInConstructor")
     public ActionListView(Model model) {
         super(model);
         initGui();
@@ -156,6 +157,20 @@ public class ActionListView extends View implements Interface {
             ListDataEvent ev = new ListDataEvent(e.getSource(), ListDataEvent.INTERVAL_ADDED, e.getIndex(), e.getIndex());
             for (ListDataListener listener : listDataListeners) {
                 listener.intervalAdded(ev);
+            }
+        }
+
+        @Override
+        public void itemRemoved(ListEvent e) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
+        public void listCleared(ListEvent e) {
+            ActionList source = (ActionList) e.getSource();
+            ListDataEvent ev = new ListDataEvent(e.getSource(), ListDataEvent.CONTENTS_CHANGED, 0, source.getSize());
+            for (ListDataListener listener : listDataListeners) {
+                listener.intervalRemoved(ev);
             }
         }
         

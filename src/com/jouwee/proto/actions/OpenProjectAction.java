@@ -1,5 +1,6 @@
 package com.jouwee.proto.actions;
 
+import com.jouwee.proto.Application;
 import com.jouwee.proto.LocaleBundle;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -20,7 +21,7 @@ public class OpenProjectAction extends AbstractAction {
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Application.getController().open();
     }
     
 }

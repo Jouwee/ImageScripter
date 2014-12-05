@@ -56,6 +56,14 @@ public class ActionList implements Iterable<Action> {
     }
     
     /**
+     * Clears the list
+     */
+    public void clear() {
+        list.clear();
+        fireListCleared();
+    }
+    
+    /**
      * Fires the event for item added
      * 
      * @param action 
@@ -65,6 +73,19 @@ public class ActionList implements Iterable<Action> {
         ListEvent event = new ListEvent(this, action, index);
         for (ListListener listener : listListeners) {
             listener.itemAdded(event);
+        }
+    }
+    
+    /**
+     * Fires the event for the list being cleared
+     * 
+     * @param action 
+     * @param index
+     */
+    private void fireListCleared() {
+        ListEvent event = new ListEvent(this, null, 0);
+        for (ListListener listener : listListeners) {
+            listener.listCleared(event);
         }
     }
     

@@ -25,9 +25,9 @@ public class Application {
      * @param args
      */
     public static void main(String[] args) {
+        controller = new ApplicationController();
         // Creates the model
         model = new Model();
-        controller = new ApplicationController();
         // Sets up the Look and Feel for the application
         setupLookAndFeel();
         SwingUtilities.invokeLater(new Runnable() {
@@ -52,7 +52,7 @@ public class Application {
             Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     /**
      * Returns the model
      *
@@ -63,16 +63,7 @@ public class Application {
     }
 
     /**
-     * Sets the model
-     *
-     * @param model
-     */
-    public static void setModel(Model model) {
-        Application.model = model;
-    }
-
-    /**
-     * Return the applcation controller
+     * Return the application controller
      *
      * @return ApplicationController
      */
