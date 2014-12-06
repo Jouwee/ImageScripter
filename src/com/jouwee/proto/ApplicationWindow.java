@@ -1,6 +1,7 @@
 package com.jouwee.proto;
 
 import com.jouwee.proto.actions.NewProjectAction;
+import com.jouwee.proto.actions.OpenInputAction;
 import com.jouwee.proto.actions.OpenProjectAction;
 import com.jouwee.proto.actions.SaveProjectAction;
 import com.jouwee.proto.view.ViewPanelContainer;
@@ -59,6 +60,7 @@ public class ApplicationWindow extends JFrame {
     private JMenuBar setupMenubar() {
         JMenuBar bar = new JMenuBar();
         bar.add(setupProjectMenu());
+        bar.add(setupInputMenu());
         return bar;
     }
     
@@ -72,6 +74,17 @@ public class ApplicationWindow extends JFrame {
         menu.add(new NewProjectAction());
         menu.add(new OpenProjectAction());
         menu.add(new SaveProjectAction());
+        return menu;
+    }
+    
+    /**
+     * Sets up the input menu
+     * 
+     * @return JMenu
+     */
+    private JMenu setupInputMenu() {
+        JMenu menu = new JMenu(LocaleBundle.def().getString("menu.input"));
+        menu.add(new OpenInputAction());
         return menu;
     }
     

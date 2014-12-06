@@ -1,6 +1,7 @@
 package com.jouwee.proto.view;
 
 import com.jouwee.proto.Action;
+import com.jouwee.proto.Application;
 import com.jouwee.proto.Model;
 import com.jouwee.proto.Scriptable;
 import com.jouwee.proto.annotations.ViewMeta;
@@ -19,7 +20,7 @@ import javax.swing.JTextArea;
  * @author Jouwee
  */
 @ViewMeta(name = "Script editor")
-public class ScriptEditorView extends View implements PropertyChangeListener {
+public class ScriptEditorView extends View<Action> implements PropertyChangeListener {
 
     /** Fonte default para o editor */
     private static final Font DEFAULT_FONT = new Font("Consolas", Font.PLAIN, 12);
@@ -31,9 +32,11 @@ public class ScriptEditorView extends View implements PropertyChangeListener {
      * 
      * @param model 
      */
+    @SuppressWarnings("LeakingThisInConstructor")
     public ScriptEditorView(Model model) {
         super(model);
         initGui();
+        Application.getModel().getState().addPropertyChangeListener("selectedAction", this);
     }
     
     /**
@@ -42,7 +45,6 @@ public class ScriptEditorView extends View implements PropertyChangeListener {
     private void initGui() {
         setupList();
         setupViewAndPlaceComponents();
-        getModel().getState().addPropertyChangeListener("selectedAction", this);
     }
     
     /**
@@ -64,19 +66,16 @@ public class ScriptEditorView extends View implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (getCurrentAction() instanceof Scriptable) {
-            Scriptable scriptable = (Scriptable) getCurrentAction();
+        updateModel(Application.getModel());
+        if (getModel() instanceof Scriptable) {
+            Scriptable scriptable = (Scriptable) getModel();
             editor.setText(scriptable.getCallbackList().get(0).getBody());
         }
     }
 
-    /**
-     * Returns the current selected action
-     * 
-     * @return Action
-     */
-    private Action getCurrentAction() {
-        return (Action) getModel().getState().get("selectedAction");
+    @Override
+    public void updateModel(Model model) {
+        setModel((Action) model.getState().get("selectedAction"));
     }
     
     /**
@@ -93,10 +92,10 @@ public class ScriptEditorView extends View implements PropertyChangeListener {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            if (getCurrentAction() instanceof Scriptable) {
-                Scriptable scriptable = (Scriptable) getCurrentAction();
+            if (getModel() instanceof Scriptable) {
+                Scriptable scriptable = (Scriptable) getModel();
                 scriptable.getCallbackList().get(0).setBody(editor.getText());
-                getModel().getScriptRunner().run();
+                Application.getModel().getScriptRunner().run();
             }
         }
     

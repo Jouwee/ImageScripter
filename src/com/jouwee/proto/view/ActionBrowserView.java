@@ -18,7 +18,7 @@ import javax.swing.JList;
  * @author Jouwee
  */
 @ViewMeta(name = "Action browser")
-public class ActionBrowserView extends View {
+public class ActionBrowserView extends View<Model> {
 
     /** Swing list to show the actions */
     private JList<Class> list;
@@ -65,6 +65,11 @@ public class ActionBrowserView extends View {
         setLayout(new BorderLayout());
         add(list);
         add(addButton, BorderLayout.SOUTH);
+    }
+
+    @Override
+    public void updateModel(Model model) {
+        setModel(model);
     }
     
     /**

@@ -1,6 +1,7 @@
 package com.jouwee.proto.view;
 
 import com.jouwee.proto.Action;
+import com.jouwee.proto.Application;
 import com.jouwee.proto.LocaleBundle;
 import com.jouwee.proto.Model;
 import com.jouwee.proto.PropertyDictionary;
@@ -22,7 +23,7 @@ import javax.swing.event.DocumentListener;
  * @author Jouwee
  */
 @ViewMeta(name = "Property Editor")
-public class PropertiesView extends View implements PropertyChangeListener {
+public class PropertiesView extends View<Action> implements PropertyChangeListener {
 
     /**
      * Creates a properties view
@@ -33,6 +34,7 @@ public class PropertiesView extends View implements PropertyChangeListener {
     public PropertiesView(Model model) {
         super(model);
         initGui();
+        Application.getModel().getState().addPropertyChangeListener("selectedAction", this);
     }
     
     /**
@@ -40,7 +42,6 @@ public class PropertiesView extends View implements PropertyChangeListener {
      */
     private void initGui() {
         rebuildFromScratch();
-        getModel().getState().addPropertyChangeListener("selectedAction", this);
     }
     
     /**
@@ -48,7 +49,7 @@ public class PropertiesView extends View implements PropertyChangeListener {
      */
     private void rebuildFromScratch() {
         clearOldComponents();
-        if (getCurrentAction() == null) {
+        if (getModel() == null) {
             setupUndefinedActionPanel();
         } else {
             setupPanelForCurrentAction();
@@ -80,11 +81,11 @@ public class PropertiesView extends View implements PropertyChangeListener {
 
         // TODO: Temporary setup
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        for (String fieldName : PropertyDictionary.def().getPropertyNames(getCurrentAction())) {
+        for (String fieldName : PropertyDictionary.def().getPropertyNames(getModel())) {
             try {
-                Field f = getCurrentAction().getClass().getDeclaredField(fieldName);
+                Field f = getModel().getClass().getDeclaredField(fieldName);
             
-                final PropertyDescriptor desc = new PropertyDescriptor(fieldName, getCurrentAction().getClass());
+                final PropertyDescriptor desc = new PropertyDescriptor(fieldName, getModel().getClass());
                 
                 if (f.getType().equals(int.class)) {
                     final JTextField fi = new JTextField();
@@ -103,8 +104,8 @@ public class PropertiesView extends View implements PropertyChangeListener {
                         }
                         private void update() {
                             try {
-                                desc.getWriteMethod().invoke(getCurrentAction(), Integer.parseInt(fi.getText()));
-                                getModel().getScriptRunner().run();
+                                desc.getWriteMethod().invoke(getModel(), Integer.parseInt(fi.getText()));
+                                Application.getModel().getScriptRunner().run();
                             } catch(Exception e) {
                                 e.printStackTrace();
                             }
@@ -115,19 +116,16 @@ public class PropertiesView extends View implements PropertyChangeListener {
             } catch(Exception e) { e.printStackTrace();}
         }
     }
-    
-    /**
-     * Returns the current selected action
-     * 
-     * @return Action
-     */
-    private Action getCurrentAction() {
-        return (Action) getModel().getState().get("selectedAction");
-    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        updateModel(Application.getModel());
         rebuildFromScratch();
+    }
+
+    @Override
+    public void updateModel(Model model) {
+        setModel((Action) model.getState().get("selectedAction"));
     }
 
 }

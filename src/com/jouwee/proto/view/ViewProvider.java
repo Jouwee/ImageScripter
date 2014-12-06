@@ -50,6 +50,7 @@ public final class ViewProvider {
     public static <T extends View> T getNewInstance(Class<T> viewType) throws InstantiationException, IllegalAccessException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
         Constructor<T> constructor = viewType.getConstructor(Model.class);
         T instance = constructor.newInstance(Application.getModel());
+        Application.addPropertyChangeListener(Application.PROP_MODEL, instance);
         return instance;
     }
 

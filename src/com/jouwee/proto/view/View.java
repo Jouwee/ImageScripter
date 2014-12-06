@@ -1,17 +1,21 @@
 package com.jouwee.proto.view;
 
+import com.jouwee.proto.Application;
 import com.jouwee.proto.Model;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
 
 /**
  * Abstract representation of a view
  *
  * @author Jouwee
+ * @param <T> Model type
  */
-public abstract class View extends JComponent {
+public abstract class View<T> extends JComponent implements PropertyChangeListener {
 
     /** Model of this view */
-    private Model model;
+    private T model;
 
     /**
      * Creates a new view
@@ -19,24 +23,39 @@ public abstract class View extends JComponent {
      * @param model
      */
     public View(Model model) {
-        this.model = model;
+        // TODO: I don't think this should be called here, but I have to change the views
+        updateModel(model);
     }
 
-    /**
-     * Return the model for this view
-     *
-     * @return Model
-     */
-    public Model getModel() {
-        return model;
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals(Application.PROP_MODEL)) {
+            updateModel(Application.getModel());
+        }
     }
-
+    
     /**
      * Update the model
      *
      * @param model
      */
-    public void updateModel(Model model) {
+    public abstract void updateModel(Model model);
+    
+    /**
+     * Return the model for this view
+     *
+     * @return Model
+     */
+    public T getModel() {
+        return model;
+    }
+
+    /**
+     * Updates the model of this view
+     * 
+     * @param model 
+     */
+    public void setModel(T model) {
         this.model = model;
     }
 

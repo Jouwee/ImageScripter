@@ -1,7 +1,9 @@
 package com.jouwee.proto.view;
 
+import com.jouwee.proto.CommonStates;
 import com.jouwee.proto.Image;
 import com.jouwee.proto.Model;
+import com.jouwee.proto.State;
 import com.jouwee.proto.annotations.ViewMeta;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
@@ -15,7 +17,7 @@ import javax.swing.JLabel;
  * @author Jouwee
  */
 @ViewMeta(name = "Image viewer")
-public class ImageView extends View implements PropertyChangeListener {
+public class ImageView extends View<State> implements PropertyChangeListener, CommonStates {
 
     /** Image */
     private JLabel image;
@@ -36,7 +38,7 @@ public class ImageView extends View implements PropertyChangeListener {
     private void initGui() {
         setupImageLabel();
         setupViewAndPlaceComponents();
-        getModel().getState().addPropertyChangeListener("outputImage", this);
+        getModel().addPropertyChangeListener(OUTPUT_IMAGE, this);
     }
     
     /**
@@ -51,8 +53,14 @@ public class ImageView extends View implements PropertyChangeListener {
      * Update the image
      */
     private void updateImage() {
-        Image outputImage = (Image) getModel().getState().get("outputImage");
-        image.setIcon(new ImageIcon(outputImage.getBufferedImage().getSubimage(0, 0, outputImage.getWidth(), outputImage.getHeight())));
+        if (getModel().get(OUTPUT_IMAGE) == null) {
+            image.setIcon(null);
+            image.setText("No input");
+        } else {
+            Image outputImage = (Image) getModel().get(OUTPUT_IMAGE);
+            image.setIcon(new ImageIcon(outputImage.getBufferedImage().getSubimage(0, 0, outputImage.getWidth(), outputImage.getHeight())));
+            image.setText(null);
+        }
         revalidate();
         repaint();
     }
@@ -68,6 +76,11 @@ public class ImageView extends View implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         updateImage();
+    }
+
+    @Override
+    public void updateModel(Model model) {
+        setModel(model.getState());
     }
     
 }

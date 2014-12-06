@@ -1,11 +1,14 @@
 package com.jouwee.proto;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 /**
  * Script runner
  * 
  * @author Jouwee
  */
-public class ScriptRunner {
+public class ScriptRunner implements CommonStates, PropertyChangeListener {
    
     /** Model */
     private final Model model;
@@ -15,8 +18,10 @@ public class ScriptRunner {
      * 
      * @param model 
      */
+    @SuppressWarnings("LeakingThisInConstructor")
     public ScriptRunner(Model model) {
         this.model = model;
+        model.getState().addPropertyChangeListener(INPUT_IMAGE, this);
     }
 
     /**
@@ -31,20 +36,24 @@ public class ScriptRunner {
         }
         endExecution();
     }
-
     
     /**
      * Sets up the execution
      */
     private void setupExecution() {
-        model.getState().set("workImage", model.getState().get("inputImage"));
+        model.getState().set(WORK_IMAGE, model.getState().get(INPUT_IMAGE));
     }
     
     /**
      * Ends the execution
      */
     private void endExecution() {
-        model.getState().set("outputImage", model.getState().get("workImage"));
+        model.getState().set(OUTPUT_IMAGE, model.getState().get(WORK_IMAGE));
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        run();
     }
 
 }

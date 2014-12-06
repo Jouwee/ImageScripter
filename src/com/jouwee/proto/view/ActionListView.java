@@ -2,6 +2,7 @@ package com.jouwee.proto.view;
 
 import com.jouwee.proto.Action;
 import com.jouwee.proto.ActionList;
+import com.jouwee.proto.Application;
 import com.jouwee.proto.Interface;
 import static com.jouwee.proto.Interface.LOWLIGHT_COLOR;
 import com.jouwee.proto.Model;
@@ -30,7 +31,7 @@ import javax.swing.event.ListSelectionListener;
  * @author Jouwee
  */
 @ViewMeta(name = "Action list")
-public class ActionListView extends View implements Interface {
+public class ActionListView extends View<ActionList> implements Interface {
 
     /** Swing list to show the actions */
     private JList list;
@@ -63,7 +64,7 @@ public class ActionListView extends View implements Interface {
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                getModel().getState().set("selectedAction", list.getSelectedValue());
+                Application.getModel().getState().set("selectedAction", list.getSelectedValue());
             }
         });
     }
@@ -75,7 +76,12 @@ public class ActionListView extends View implements Interface {
         setLayout(new BorderLayout());
         add(list);
     }
-    
+
+    @Override
+    public void updateModel(Model model) {
+        setModel(model.getProject().getActionList());
+    }
+
     /**
      * List cell renderer for actions
      */
@@ -129,17 +135,17 @@ public class ActionListView extends View implements Interface {
         @SuppressWarnings("LeakingThisInConstructor")
         public ActionJListModel() {
             listDataListeners = new ArrayList<>();
-            getModel().getProject().getActionList().addListListener(this);
+            getModel().addListListener(this);
         }
         
         @Override
         public int getSize() {
-            return getModel().getProject().getActionList().getSize();
+            return getModel().getSize();
         }
 
         @Override
         public Action getElementAt(int index) {
-            return getModel().getProject().getActionList().get(index);
+            return getModel().get(index);
         }
 
         @Override
