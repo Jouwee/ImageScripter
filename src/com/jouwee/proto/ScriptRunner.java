@@ -1,5 +1,7 @@
 package com.jouwee.proto;
 
+import com.jouwee.proto.listeners.ListEvent;
+import com.jouwee.proto.listeners.ListListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -8,7 +10,7 @@ import java.beans.PropertyChangeListener;
  * 
  * @author Jouwee
  */
-public class ScriptRunner implements CommonStates, PropertyChangeListener {
+public class ScriptRunner implements CommonStates {
    
     /** Model */
     private final Model model;
@@ -21,7 +23,10 @@ public class ScriptRunner implements CommonStates, PropertyChangeListener {
     @SuppressWarnings("LeakingThisInConstructor")
     public ScriptRunner(Model model) {
         this.model = model;
-        model.getState().addPropertyChangeListener(INPUT_IMAGE, this);
+        // Register the autorunner
+        AutoRunner autoRunner = new AutoRunner();
+        model.getState().addPropertyChangeListener(INPUT_IMAGE, autoRunner);
+        model.getProject().getActionList().addListListener(autoRunner);
     }
 
     /**
@@ -51,9 +56,31 @@ public class ScriptRunner implements CommonStates, PropertyChangeListener {
         model.getState().set(OUTPUT_IMAGE, model.getState().get(WORK_IMAGE));
     }
 
+    /**
+     * Auto runner for when it notices a significant change in the model
+     */
+    private class AutoRunner implements PropertyChangeListener, ListListener {
+    
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        run();
+        public void propertyChange(PropertyChangeEvent evt) {
+            run();
+        }
+
+        @Override
+        public void itemAdded(ListEvent event) {
+            run();
+        }
+
+        @Override
+        public void itemRemoved(ListEvent event) {
+            run();
+        }
+
+        @Override
+        public void listCleared(ListEvent event) {
+            run();
+        }
+    
     }
 
 }

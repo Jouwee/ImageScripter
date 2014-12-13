@@ -4,7 +4,6 @@ import com.jouwee.proto.Action;
 import com.jouwee.proto.ActionList;
 import com.jouwee.proto.Application;
 import com.jouwee.proto.Interface;
-import static com.jouwee.proto.Interface.LOWLIGHT_COLOR;
 import com.jouwee.proto.Model;
 import com.jouwee.proto.annotations.ActionMeta;
 import com.jouwee.proto.annotations.ViewMeta;
@@ -15,15 +14,14 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import org.pushingpixels.substance.api.renderers.SubstanceDefaultListCellRenderer;
 
 /**
  * Action list view
@@ -33,6 +31,8 @@ import javax.swing.event.ListSelectionListener;
 @ViewMeta(name = "Action list")
 public class ActionListView extends View<ActionList> implements Interface {
 
+    /** Preferred action item size */
+    private static final Dimension PREFERRED_ACTION_SIZE = new Dimension(150, 50);
     /** Swing list to show the actions */
     private JList list;
     
@@ -80,45 +80,31 @@ public class ActionListView extends View<ActionList> implements Interface {
     @Override
     public void updateModel(Model model) {
         setModel(model.getProject().getActionList());
+        if (list != null) {
+            list.setModel(new ActionJListModel());
+        }
     }
 
     /**
      * List cell renderer for actions
      */
-    private class ActionCellRenderer implements ListCellRenderer<Action> {
+    private class ActionCellRenderer extends SubstanceDefaultListCellRenderer {
 
         @Override
-        public Component getListCellRendererComponent(JList<? extends Action> list, Action value, int index, boolean isSelected, boolean cellHasFocus) {
-            JLabel l = new ActionListCell();
-            if (isSelected) {
-                l.setOpaque(true);
-                l.setBackground(SELECTION_COLOR);
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (component instanceof JLabel) {
+                JLabel label = (JLabel) component;
+                // If there is metadata
+                if (value.getClass().isAnnotationPresent(ActionMeta.class)) {
+                    ActionMeta meta = value.getClass().getAnnotation(ActionMeta.class);
+                    label.setText(meta.name());
+                }
+                label.setPreferredSize(PREFERRED_ACTION_SIZE);
             }
-            
-            if (value.getClass().isAnnotationPresent(ActionMeta.class)) {
-                ActionMeta meta = value.getClass().getAnnotation(ActionMeta.class);
-                l.setText(meta.name());
-            }
-            
-            return l;
+            return component;
         }
 
-    }
-    
-    /**
-     * Action list cell
-     */
-    private class ActionListCell extends JLabel {
-
-        /**
-         * Create a new action list cell
-         */
-        public ActionListCell() {
-            super();
-            setPreferredSize(new Dimension(20, 50));
-            setBorder(BorderFactory.createLineBorder(LOWLIGHT_COLOR));
-        }
-        
     }
     
     /**

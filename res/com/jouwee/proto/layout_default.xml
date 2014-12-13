@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout>
-    <container split="horizontal">
-        <view>
-            <class>com.jouwee.proto.view.ActionListView</class>
-        </view>
-        <view>
-            <class>com.jouwee.proto.view.ImageView</class>
-        </view>
-        <view>
-            <class>com.jouwee.proto.view.PropertiesView</class>
-        </view>
+    <container split="horizontal" width="1">
+        <view class="com.jouwee.proto.view.ActionListView" size="300"></view>
+        <container split="vertical" size="1300">
+            <view class="com.jouwee.proto.view.ImageView" size="800"></view>
+            <view class="com.jouwee.proto.view.ScriptEditorView" size="200"></view>
+        </container>
+        <view class="com.jouwee.proto.view.PropertiesView" size="0"></view>
     </container>
 </layout>

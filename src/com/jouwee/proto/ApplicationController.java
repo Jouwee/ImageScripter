@@ -6,9 +6,6 @@ import com.jouwee.proto.gson.InterfaceAdapter;
 import com.jouwee.proto.utils.FileUtils;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
 /**
@@ -101,7 +98,6 @@ public class ApplicationController implements CommonStates {
      */
     public void openInput(File file) {
         try {
-            // TODO: Create a class for this kind of thing
             Application.getModel().getState().set(INPUT_IMAGE,  ImageFactory.fromFile(file));
         } catch (IOException ex) {
             ExceptionHandler.handle(ex);
