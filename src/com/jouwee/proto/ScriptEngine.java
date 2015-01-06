@@ -4,16 +4,14 @@ import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 
 /**
- * Script bean
+ * Script engine
  * 
  * @author Jouwee
  */
-public class Script {
-    
+public class ScriptEngine {
+
     /** Script's text */
     private String text;
-    /** Scriptable */
-    private final Scriptable scriptable;
     
     // TODO: Not his responsability
     private Context cx;
@@ -25,9 +23,8 @@ public class Script {
      * 
      * @param scriptable
      */
-    public Script(Scriptable scriptable) {
+    public ScriptEngine() {
         text = "function f(x, y, v) {\nreturn v;\n}";
-        this.scriptable = scriptable;
     }
     
     /**
@@ -39,7 +36,11 @@ public class Script {
         try {
              cx = Context.enter();
              scope = cx.initStandardObjects();
-             f = cx.compileFunction(scope, callback.getBody(), "<cmd>", 1, null);
+             String body = ScriptProvider.def().getFullBody(callback);
+             
+             System.out.println(body);
+             
+             f = cx.compileFunction(scope, body, "<cmd>", 1, null);
         } catch(Exception e) {e.printStackTrace();}
     }
 

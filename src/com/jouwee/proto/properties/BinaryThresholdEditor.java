@@ -1,7 +1,6 @@
 package com.jouwee.proto.properties;
 
 import com.jouwee.proto.Action;
-import com.jouwee.proto.Application;
 import com.jouwee.proto.ExceptionHandler;
 import java.awt.BorderLayout;
 import java.beans.PropertyDescriptor;
@@ -65,8 +64,6 @@ public class BinaryThresholdEditor extends JComponent implements ChangeListener 
     public void stateChanged(ChangeEvent e) {
         try {
             descriptor.getWriteMethod().invoke(BinaryThresholdEditor.this.bean, new BinaryThreshold(slider.getValue()));
-            // TODO: Should not be here
-            Application.getModel().getScriptRunner().run();
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             ExceptionHandler.handle(ex);
         }

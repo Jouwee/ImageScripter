@@ -9,7 +9,7 @@ import com.jouwee.proto.annotations.ActionMeta;
  *
  * @author Jouwee
  */
-@ActionMeta(name = "Average grayscale")
+@ActionMeta(name = "Average grayscale", category = "grayscle")
 public class AverageGrayscale extends Filter {
 
     @Override

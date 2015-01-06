@@ -9,31 +9,32 @@ import java.util.List;
  */
 public abstract class Filter extends Iterator {
 
-    /** Callback before every pixel */
-    private Callback beforePixel;
+    /** Callback - Before pixel */
+    private final Callback beforePixel;
 
+    /**
+     * New filter
+     */
     public Filter() {
-        beforePixel = new Callback("f", "function f(x, y, v) {\nreturn v;\n}");
+        super();
+        beforePixel = new Callback("beforePixel", "return value;", new Callback.Return(), new Callback.Parameter("value", Integer.class, "Pixel value"));
     }
     
     @Override
     public void beforeProcessing() {
         super.beforeProcessing();
-        // TODO: Find a better place for this
-        getScript().compile(beforePixel);
     }
     
     @Override
     public void iteratePixel(int x, int y) {
-        int v = processPixel(x, y);
-        
-        Object o = getScript().invoke(beforePixel, x, y, v);
-        if(o instanceof Integer) {
-            v = (Integer)o;
+        int value = processPixel(x, y);
+        Object r = Application.getModel().getScriptEngine().invoke(beforePixel, value);
+        if (r instanceof Double) {
+            value = ((Double) r).intValue();
         } else {
-            v = ((Double) o).intValue();
+            value = (Integer) r;
         }
-        getNewImage().setPixelValue(x, y, v);
+        getNewImage().setPixelValue(x, y, value);
     }
     
     /**
@@ -47,9 +48,9 @@ public abstract class Filter extends Iterator {
 
     @Override
     public List<Callback> getCallbackList() {
-        List<Callback> list = super.getCallbackList();
-        list.add(beforePixel);
-        return list;
+        List<Callback> callbackList = super.getCallbackList();
+        callbackList.add(beforePixel);
+        return callbackList;
     }
-    
+
 }

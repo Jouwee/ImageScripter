@@ -69,7 +69,9 @@ public class ScriptEditorView extends View<Action> implements PropertyChangeList
         updateModel(Application.getModel());
         if (getModel() instanceof Scriptable) {
             Scriptable scriptable = (Scriptable) getModel();
-            editor.setText(scriptable.getCallbackList().get(0).getBody());
+            if (scriptable.getCallbackList().size() > 1) {
+                editor.setText(scriptable.getCallbackList().get(0).getBody());
+            }
         }
     }
 
@@ -94,7 +96,9 @@ public class ScriptEditorView extends View<Action> implements PropertyChangeList
         public void actionPerformed(ActionEvent e) {
             if (getModel() instanceof Scriptable) {
                 Scriptable scriptable = (Scriptable) getModel();
-                scriptable.getCallbackList().get(0).setBody(editor.getText());
+                if (scriptable.getCallbackList().size() > 0) {
+                    scriptable.getCallbackList().get(0).setBody(editor.getText());
+                }
                 Application.getModel().getScriptRunner().run();
             }
         }

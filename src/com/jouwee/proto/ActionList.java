@@ -2,6 +2,7 @@ package com.jouwee.proto;
 
 import com.jouwee.proto.listeners.ListEvent;
 import com.jouwee.proto.listeners.ListListener;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -17,13 +18,16 @@ public class ActionList implements Iterable<Action> {
     private final List<Action> list;
     /** List listeners */
     private final transient List<ListListener> listListeners;
-
+    /** Global property change listeners */
+    private final transient List<PropertyChangeListener> globalPropertyChangeListeners;
+    
     /**
      * Crates a new action list
      */
     public ActionList() {
         list = new ArrayList<>();
         listListeners = new ArrayList<>();
+        globalPropertyChangeListeners = new ArrayList<>();
     }
 
     /**
@@ -53,6 +57,9 @@ public class ActionList implements Iterable<Action> {
         int index = list.size();
         list.add(action);
         fireItemAdded(action, index);
+        for (PropertyChangeListener listener : globalPropertyChangeListeners) {
+            action.addPropertyChangeListener(listener);
+        }
     }
 
     /**
@@ -111,6 +118,19 @@ public class ActionList implements Iterable<Action> {
     @Override
     public Iterator<Action> iterator() {
         return list.iterator();
+    }
+    
+    /**
+     * Add a property change listener to every existing Action, and also register it for future Actions
+     * 
+     * @param listener 
+     */
+    public void addGlobalPropertyChangeListener(PropertyChangeListener listener) {
+        // TODO: Add support for property specific and class specific listeners
+        for (Action action : this) {
+            action.addPropertyChangeListener(listener);
+        }
+        globalPropertyChangeListeners.add(listener);
     }
 
 }

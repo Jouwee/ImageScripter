@@ -5,7 +5,7 @@ package com.jouwee.proto;
  *
  * @author Jouwees
  */
-public abstract class Processor implements Action {
+public abstract class Processor extends Action {
 
     @Override
     public void run() {

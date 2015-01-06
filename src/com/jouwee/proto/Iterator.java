@@ -14,15 +14,14 @@ public abstract class Iterator extends Processor implements Scriptable {
     private Image originalImage;
     /** New image */
     private Image newImage;
-    /** Script */
-    private Script script;
-
+    
     public Iterator() {
-        script = new Script();
+        super();
     }
     
     @Override
     public Image process(Image image) {
+        compileCallbacks();
         originalImage = image;
         newImage = new Image(image.getWidth(), image.getHeight());
         beforeProcessing();
@@ -74,19 +73,15 @@ public abstract class Iterator extends Processor implements Scriptable {
     }
 
     @Override
-    public Script getScript() {
-        return script;
+    public void compileCallbacks() {
+        for (Callback callback : getCallbackList()) {
+            Application.getModel().getScriptEngine().compile(callback);
+        }
     }
-
-    @Override
-    public void setScript(Script script) {
-        this.script = script;
-    }
-
+    
     @Override
     public List<Callback> getCallbackList() {
         List<Callback> callbackList = new ArrayList<>();
-        
         return callbackList;
     }
     

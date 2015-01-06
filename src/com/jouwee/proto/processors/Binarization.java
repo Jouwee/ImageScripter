@@ -15,7 +15,7 @@ import com.jouwee.proto.properties.BinaryThreshold;
  *
  * @author Jouwee
  */
-@ActionMeta(name = "Binarization")
+@ActionMeta(name = "Binarization", category = "binarization")
 public class Binarization extends Filter {
 
     /** Threshold */
@@ -55,7 +55,9 @@ public class Binarization extends Filter {
      * @param threshold 
      */
     public void setThreshold(BinaryThreshold threshold) {
+        BinaryThreshold oldValue = this.threshold;
         this.threshold = threshold;
+        getPropertyChangeSupport().firePropertyChange("threshold", oldValue, threshold);
     }
 
 }

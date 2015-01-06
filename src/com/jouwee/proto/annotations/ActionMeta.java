@@ -20,5 +20,12 @@ public @interface ActionMeta {
      * @return String
      */
     public String name();
+ 
+    /**
+     * Category
+     * 
+     * @return String
+     */
+    public String category();
     
 }

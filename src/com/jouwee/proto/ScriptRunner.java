@@ -27,6 +27,7 @@ public class ScriptRunner implements CommonStates {
         AutoRunner autoRunner = new AutoRunner();
         model.getState().addPropertyChangeListener(INPUT_IMAGE, autoRunner);
         model.getProject().getActionList().addListListener(autoRunner);
+        model.getProject().getActionList().addGlobalPropertyChangeListener(autoRunner);
     }
 
     /**
@@ -35,9 +36,7 @@ public class ScriptRunner implements CommonStates {
     public void run() {
         setupExecution();
         for (Action action : model.getProject().getActionList()) {
-            if(action instanceof Processor) {
-                action.run();
-            }
+            action.run();
         }
         endExecution();
     }

@@ -12,7 +12,9 @@ public class Model {
     /** State of the application */
     private final State state;
     /** Script runner */
-    private final ScriptRunner scriptRunner;
+    private final transient ScriptRunner scriptRunner;
+    /** Script engine */
+    private final transient ScriptEngine scriptEngine;
 
     /**
      * Creates a new Model
@@ -30,6 +32,7 @@ public class Model {
         this.project = project;
         this.state = new State();
         this.scriptRunner = new ScriptRunner(this);
+        this.scriptEngine = new ScriptEngine();
     }
 
     /**
@@ -57,6 +60,15 @@ public class Model {
      */
     public ScriptRunner getScriptRunner() {
         return scriptRunner;
+    }
+
+    /**
+     * Returns the script engine
+     * 
+     * @return ScriptEngine
+     */
+    public ScriptEngine getScriptEngine() {
+        return scriptEngine;
     }
 
 }
