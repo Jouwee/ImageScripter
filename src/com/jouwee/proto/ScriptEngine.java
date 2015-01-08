@@ -12,16 +12,13 @@ public class ScriptEngine {
 
     /** Script's text */
     private String text;
-    
-    // TODO: Not his responsability
+    // TODO: Multiple callbacks
     private Context cx;
     private org.mozilla.javascript.Scriptable scope;
     private Function f;
     
     /**
      * Create a new Script
-     * 
-     * @param scriptable
      */
     public ScriptEngine() {
         text = "function f(x, y, v) {\nreturn v;\n}";
@@ -30,16 +27,16 @@ public class ScriptEngine {
     /**
      * Compiles a callback
      * 
+     * @param header
      * @param callback 
      */
-    public void compile(Callback callback) {
+    public void compile(CallbackHeader header, Callback callback) {
         try {
+            
              cx = Context.enter();
              scope = cx.initStandardObjects();
-             String body = ScriptProvider.def().getFullBody(callback);
-             
-             System.out.println(body);
-             
+             String body = ScriptProvider.def().getFullBody(callback, header);
+             System.out.println("body: " + body);
              f = cx.compileFunction(scope, body, "<cmd>", 1, null);
         } catch(Exception e) {e.printStackTrace();}
     }
@@ -48,11 +45,12 @@ public class ScriptEngine {
      * Invoke a callback
      * 
      * 
+     * @param header
      * @param callback
      * @param params
      * @return 
      */
-    public Object invoke(Callback callback, Object... params) {
+    public Object invoke(CallbackHeader header, Callback callback, Object... params) {
         try {
              return f.call(cx, scope, scope, params);
         } catch(Exception e) {e.printStackTrace();}

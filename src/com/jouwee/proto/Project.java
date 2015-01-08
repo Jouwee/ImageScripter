@@ -12,7 +12,7 @@ public class Project {
     /** Action list */
     private final ActionList actionList;
     /** Save file */
-    private File projectSaveFile;
+    private transient File projectSaveFile;
 
     /**
      * Creates a new project

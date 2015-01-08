@@ -48,11 +48,10 @@ public class ApplicationController implements CommonStates {
      */
     public void save(File file) {
         Gson gson = new GsonBuilder().registerTypeAdapter(Action.class, new InterfaceAdapter<Action>()).create();
-        //Gson gson = new Gson();
-        String jsonBuffer = gson.toJson(Application.getModel().getProject());
         try {
+            String jsonBuffer = gson.toJson(Application.getModel().getProject());
             FileUtils.save(jsonBuffer, file);
-        } catch(IOException ex) {
+        } catch(IOException | IllegalArgumentException | UnsupportedOperationException ex) {
             ExceptionHandler.handle(ex, "Error while saving file " + file.getAbsolutePath());
         }
     }

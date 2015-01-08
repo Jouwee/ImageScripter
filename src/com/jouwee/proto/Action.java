@@ -2,6 +2,9 @@ package com.jouwee.proto;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The most abstract representation of an action that can be used
@@ -10,16 +13,20 @@ import java.beans.PropertyChangeSupport;
  */
 public abstract class Action {
     
-    /**
-     * Property change support
-     */
-    private final PropertyChangeSupport propertyChangeSupport;
-
+    /** Property change support */
+    private transient final PropertyChangeSupport propertyChangeSupport;
+    /** Callback headers */
+    private transient final Map<String, CallbackHeader> callbackHeaders;
+    /** Callbacks */
+    private final Map<String, Callback> callbacks;
+    
     /**
      * New action
      */
     public Action() {
         propertyChangeSupport = new PropertyChangeSupport(this);
+        callbackHeaders = new HashMap<>();
+        callbacks = new HashMap<>();
     }
     
     /**
@@ -97,6 +104,68 @@ public abstract class Action {
      */
     protected PropertyChangeSupport getPropertyChangeSupport() {
         return propertyChangeSupport;
+    }
+    
+    /**
+     * Register a callback
+     * 
+     * @param header
+     * @param callback 
+     */
+    protected void registerCallback(CallbackHeader header, Callback callback) {
+        callbackHeaders.put(header.getFunctionName(), header);
+        callbacks.put(header.getFunctionName(), callback);
+    }
+    
+    /**
+     * Returns the callback key set
+     * 
+     * @return 
+     */
+    public Collection<String> getCallbackKeys() {
+        return callbackHeaders.keySet();
+    }
+    
+    /**
+     * Returns a callback
+     * 
+     * @param key 
+     * @return Callback
+     */
+    public Callback getCallback(String key) {
+        return callbacks.get(key);
+    }
+    
+    /**
+     * Returns a callback
+     * 
+     * @param key 
+     * @return CallbackHeader
+     */
+    public CallbackHeader getCallbackHeader(String key) {
+        return callbackHeaders.get(key);
+    }
+    
+    /**
+     * Compile all callbacks
+     */
+    public void compileCallbacks() {
+        for (String string : callbackHeaders.keySet()) {
+            Application.getModel().getScriptEngine().compile(callbackHeaders.get(string), callbacks.get(string));
+        }
+    }
+    
+    /**
+     * Invoke a callback
+     * 
+     * @param callbackKey
+     * @param parameters
+     * @return Object
+     */
+    public Object invoke(String callbackKey, Object... parameters) {
+        CallbackHeader header = callbackHeaders.get(callbackKey);
+        Callback callback = callbacks.get(callbackKey);
+        return Application.getModel().getScriptEngine().invoke(header, callback, parameters);
     }
     
 }

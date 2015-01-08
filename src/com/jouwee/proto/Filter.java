@@ -1,7 +1,5 @@
 package com.jouwee.proto;
 
-import java.util.List;
-
 /**
  * Abstract class for filters
  * 
@@ -10,14 +8,14 @@ import java.util.List;
 public abstract class Filter extends Iterator {
 
     /** Callback - Before pixel */
-    private final Callback beforePixel;
+    private static final String CALLBACK_BEFORE_PIXEL = "beforePixel";
 
     /**
      * New filter
      */
     public Filter() {
         super();
-        beforePixel = new Callback("beforePixel", "return value;", new Callback.Return(), new Callback.Parameter("value", Integer.class, "Pixel value"));
+        registerCallback(new CallbackHeader(CALLBACK_BEFORE_PIXEL, new Parameter("value", Object.class, "Value gathered")), new Callback("return value;"));
     }
     
     @Override
@@ -28,7 +26,7 @@ public abstract class Filter extends Iterator {
     @Override
     public void iteratePixel(int x, int y) {
         int value = processPixel(x, y);
-        Object r = Application.getModel().getScriptEngine().invoke(beforePixel, value);
+        Object r = invoke(CALLBACK_BEFORE_PIXEL, value);
         if (r instanceof Double) {
             value = ((Double) r).intValue();
         } else {
@@ -45,12 +43,5 @@ public abstract class Filter extends Iterator {
      * @return int
      */
     public abstract int processPixel(int x, int y);
-
-    @Override
-    public List<Callback> getCallbackList() {
-        List<Callback> callbackList = super.getCallbackList();
-        callbackList.add(beforePixel);
-        return callbackList;
-    }
 
 }

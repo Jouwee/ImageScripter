@@ -1,19 +1,16 @@
 package com.jouwee.proto;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * First concrete level of image processor, going towards image filters and transformers
  * 
  * @author Jouwee
  */
-public abstract class Iterator extends Processor implements Scriptable {
+public abstract class Iterator extends Processor {
 
     /** Original image */
-    private Image originalImage;
+    private transient Image originalImage;
     /** New image */
-    private Image newImage;
+    private transient Image newImage;
     
     public Iterator() {
         super();
@@ -70,19 +67,6 @@ public abstract class Iterator extends Processor implements Scriptable {
      */
     public Image getNewImage() {
         return newImage;
-    }
-
-    @Override
-    public void compileCallbacks() {
-        for (Callback callback : getCallbackList()) {
-            Application.getModel().getScriptEngine().compile(callback);
-        }
-    }
-    
-    @Override
-    public List<Callback> getCallbackList() {
-        List<Callback> callbackList = new ArrayList<>();
-        return callbackList;
     }
     
 }
