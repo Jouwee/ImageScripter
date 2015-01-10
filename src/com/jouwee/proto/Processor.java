@@ -16,6 +16,8 @@ public abstract class Processor extends Action {
         Image image = (Image) Application.getModel().getState().get("workImage");
         // Processes and save the work image
         Application.getModel().getState().set("workImage", process(image));
+        
+        
     }
 
     /**

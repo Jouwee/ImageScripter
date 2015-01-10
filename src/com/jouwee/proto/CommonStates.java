@@ -7,6 +7,8 @@ package com.jouwee.proto;
  */
 public interface CommonStates {
     
+    /** Input */
+    public static final String INPUT = "input";
     /** Input image */
     public static final String INPUT_IMAGE = "inputImage";
     /** Output image */

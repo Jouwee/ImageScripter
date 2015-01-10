@@ -1,7 +1,9 @@
 package com.jouwee.proto.view;
 
 import com.jouwee.proto.CommonStates;
+import static com.jouwee.proto.CommonStates.INPUT;
 import com.jouwee.proto.Image;
+import com.jouwee.proto.Input;
 import com.jouwee.proto.Model;
 import com.jouwee.proto.State;
 import com.jouwee.proto.annotations.ViewMeta;
@@ -10,6 +12,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * View for images
@@ -21,6 +26,8 @@ public class ImageView extends View<State> implements PropertyChangeListener, Co
 
     /** Image */
     private JLabel image;
+    /** Input slider */
+    private JSlider inputSlider;
     
     /**
      * Creates a new Image View
@@ -37,8 +44,10 @@ public class ImageView extends View<State> implements PropertyChangeListener, Co
      */
     private void initGui() {
         setupImageLabel();
+        setupInputSlider();
         setupViewAndPlaceComponents();
         getModel().addPropertyChangeListener(OUTPUT_IMAGE, this);
+        getModel().addPropertyChangeListener(INPUT, this);
     }
     
     /**
@@ -47,6 +56,27 @@ public class ImageView extends View<State> implements PropertyChangeListener, Co
     private void setupImageLabel() {
         image = new JLabel();
         updateImage();
+    }
+    
+    /**
+     * Sets up the input slider
+     */
+    private void setupInputSlider() {
+        if (inputSlider == null) {
+            inputSlider = new JSlider();
+            // TODO: Bad listener
+            inputSlider.addChangeListener(new ChangeListener() {
+                @Override
+                public void stateChanged(ChangeEvent e) {
+                    Input input = (Input) getModel().get(INPUT);
+                    getModel().set(INPUT_IMAGE, input.getFrame(inputSlider.getValue()));
+                }
+            });
+        }
+        if (getModel().get(INPUT) != null) {
+            Input input = (Input) getModel().get(INPUT);
+            inputSlider.setMaximum(input.getFrameCount() - 1);
+        }
     }
     
     /**
@@ -71,11 +101,17 @@ public class ImageView extends View<State> implements PropertyChangeListener, Co
     private void setupViewAndPlaceComponents() {
         setLayout(new BorderLayout());
         add(image);
+        add(inputSlider, BorderLayout.SOUTH);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        updateImage();
+        if (evt.getPropertyName().equals(OUTPUT_IMAGE)) {
+            updateImage();
+        }
+        if (evt.getPropertyName().equals(INPUT)) {
+            setupInputSlider();
+        }
     }
 
     @Override

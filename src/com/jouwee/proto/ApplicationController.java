@@ -86,8 +86,9 @@ public class ApplicationController implements CommonStates {
      */
     public void selectInput() {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setMultiSelectionEnabled(true);
         fileChooser.showOpenDialog(null);
-        openInput(fileChooser.getSelectedFile());
+        openInput(fileChooser.getSelectedFiles());
     }
     
     /**
@@ -95,9 +96,9 @@ public class ApplicationController implements CommonStates {
      * 
      * @param file 
      */
-    public void openInput(File file) {
+    public void openInput(File[] file) {
         try {
-            Application.getModel().getState().set(INPUT_IMAGE,  ImageFactory.fromFile(file));
+            Application.getModel().getState().set(INPUT, new ImageInput(ImageFactory.fromFile(file)));
         } catch (IOException ex) {
             ExceptionHandler.handle(ex);
         }
