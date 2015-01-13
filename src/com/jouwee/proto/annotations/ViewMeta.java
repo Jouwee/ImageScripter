@@ -21,4 +21,11 @@ public @interface ViewMeta {
      */
     public String name();
     
+    /**
+     * Icon
+     * 
+     * @return String
+     */
+    public String icon() default "";
+    
 }

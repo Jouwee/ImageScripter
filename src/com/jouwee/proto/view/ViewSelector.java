@@ -5,6 +5,7 @@ import com.jouwee.proto.annotations.ViewMeta;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.ComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -32,7 +33,7 @@ public class ViewSelector extends JComboBox<Class<? extends View>> {
     private static class ViewSelectorRenderer implements ListCellRenderer<Class> {
 
         /** Selected color */
-        private static final Color SELECTED = new Color(0x6699FF);
+        private static final Color SELECTED = new Color(0x4D77B3);
         
         @Override
         public Component getListCellRendererComponent(JList<? extends Class> list, Class value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -40,6 +41,14 @@ public class ViewSelector extends JComboBox<Class<? extends View>> {
             if (value != null) {
                 ViewMeta meta = (ViewMeta) value.getAnnotation(ViewMeta.class);
                 label.setText(meta.name());
+                
+                if (!meta.icon().isEmpty()) {
+                   label.setIcon(new ImageIcon(ViewSelector.class.getResource("/com/jouwee/proto/icons/" + meta.icon()))); 
+                } else {
+                    if (ViewSelector.class.getResource("/com/jouwee/proto/icons/" + value.getSimpleName() + ".PNG") != null) {
+                        label.setIcon(new ImageIcon(ViewSelector.class.getResource("/com/jouwee/proto/icons/" + value.getSimpleName() + ".PNG"))); 
+                    }
+                }
             }
             label.setOpaque(true);
             if (isSelected) {
