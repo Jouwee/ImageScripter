@@ -4,6 +4,7 @@ import com.jouwee.proto.mvc.View;
 import com.jouwee.proto.ExceptionHandler;
 import com.jouwee.proto.Interface;
 import com.jouwee.proto.ViewProvider;
+import com.jouwee.proto.mvc.ToolbarView;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -34,6 +35,8 @@ public class ViewPanel extends JPanel implements Interface {
     private ViewSelector viewSelector;
     /** Current view for this panel */
     private View view;
+    /** Toolbar panel */
+    private JPanel pToolbar;
     
     /**
      * Creates a new View Panel
@@ -72,7 +75,29 @@ public class ViewPanel extends JPanel implements Interface {
         pViewInfo.setMinimumSize(MINIMUM_INFO_SIZE);
         pViewInfo.setLayout(new FlowLayout(FlowLayout.LEFT));
         pViewInfo.add(viewSelector);
+        pViewInfo.add(setupToolbarPanel());
         return pViewInfo;
+    }
+    
+    /**
+     * Sets up the toolbar panel
+     */
+    private JPanel setupToolbarPanel() {
+        if (pToolbar == null) {
+            pToolbar = new JPanel();
+            pToolbar.setLayout(new BorderLayout());
+        } else {
+            pToolbar.removeAll();
+        }
+        try {
+            ToolbarView toolbar = ViewProvider.getNewToolbarView(view);
+            if (toolbar != null) {
+                pToolbar.add(toolbar);
+            }
+        } catch(IllegalAccessException | InstantiationException e) {
+            ExceptionHandler.handle(e);
+        }
+        return pToolbar;
     }
 
     /**
@@ -98,6 +123,7 @@ public class ViewPanel extends JPanel implements Interface {
         }
         add(newView, BorderLayout.CENTER);
         viewSelector.setSelectedItem(newView.getClass());
+        setupToolbarPanel();
         revalidate();        
         repaint();        
     }

@@ -1,6 +1,7 @@
 package com.jouwee.proto.annotations;
 
 import com.jouwee.proto.mvc.Controller;
+import com.jouwee.proto.mvc.ToolbarView;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -35,5 +36,12 @@ public @interface ViewMeta {
      * @return Controller
      */
     public Class<? extends Controller> controller();
+    
+    /** 
+     * Toolbar view
+     * 
+     * @return ToolbarView
+     */
+    public Class<? extends ToolbarView> toolbar() default ToolbarView.class;
     
 }

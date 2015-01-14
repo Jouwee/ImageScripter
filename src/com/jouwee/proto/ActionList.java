@@ -61,6 +61,17 @@ public class ActionList implements Iterable<Action> {
             action.addPropertyChangeListener(listener);
         }
     }
+    
+    /**
+     * Removes the specified action
+     * s
+     * @param action 
+     */
+    public void remove(Action action) {
+        int index = list.indexOf(action);
+        list.remove(index);
+        fireItemRemoved(action, index);
+    }
 
     /**
      * Clears the list
@@ -80,6 +91,19 @@ public class ActionList implements Iterable<Action> {
         ListEvent event = new ListEvent(this, action, index);
         for (ListListener listener : listListeners) {
             listener.itemAdded(event);
+        }
+    }
+
+    /**
+     * Fires the event for item removed
+     *
+     * @param action
+     * @param index
+     */
+    private void fireItemRemoved(Action action, int index) {
+        ListEvent event = new ListEvent(this, action, index);
+        for (ListListener listener : listListeners) {
+            listener.itemRemoved(event);
         }
     }
 

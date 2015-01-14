@@ -3,6 +3,7 @@ package com.jouwee.proto;
 import com.jouwee.proto.mvc.View;
 import com.jouwee.proto.annotations.ViewMeta;
 import com.jouwee.proto.mvc.Controller;
+import com.jouwee.proto.mvc.ToolbarView;
 import com.jouwee.proto.view.ActionBrowserView;
 import com.jouwee.proto.view.ActionListView;
 import com.jouwee.proto.view.ImageView;
@@ -82,6 +83,18 @@ public final class ViewProvider {
         instance.setController(controller);
         Application.addPropertyChangeListener(Application.PROP_MODEL, instance);
         return instance;
+    }
+    
+    public static ToolbarView getNewToolbarView(View view) throws InstantiationException, IllegalAccessException {
+        if (view == null) {
+            return null;
+        }
+        Class<? extends ToolbarView> toolbarClass = view.getClass().getAnnotation(ViewMeta.class).toolbar();
+        ToolbarView toolbar = toolbarClass.newInstance();
+        toolbar.setView(view);
+        toolbar.setModel(view.getModel());
+        toolbar.setController(view.getController());
+        return toolbar;
     }
 
 }

@@ -29,13 +29,13 @@ import org.pushingpixels.substance.api.renderers.SubstanceDefaultListCellRendere
  * 
  * @author Jouwee
  */
-@ViewMeta(name = "Action list", controller = ActionListController.class)
+@ViewMeta(name = "Action list", controller = ActionListController.class, toolbar = ActionListToolbarView.class)
 public class ActionListView extends View<ActionList, ActionListController> implements Interface {
 
     /** Preferred action item size */
     private static final Dimension PREFERRED_ACTION_SIZE = new Dimension(150, 50);
     /** Swing list to show the actions */
-    private JList list;
+    private JList<Action> list;
     
     /**
      * Creates a new action list view
@@ -60,7 +60,7 @@ public class ActionListView extends View<ActionList, ActionListController> imple
      * Sets up the list for the actions
      */
     private void setupList() {
-        list = new JList(new ActionJListModel());
+        list = new JList<Action>(new ActionJListModel());
         list.setCellRenderer(new ActionCellRenderer());
         list.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -86,6 +86,15 @@ public class ActionListView extends View<ActionList, ActionListController> imple
         }
     }
 
+    /**
+     * Returns the selected action
+     * 
+     * @return Action
+     */
+    public Action getSelectedAction() {
+        return list.getSelectedValue();
+    }
+    
     /**
      * List cell renderer for actions
      */
@@ -155,7 +164,10 @@ public class ActionListView extends View<ActionList, ActionListController> imple
 
         @Override
         public void itemRemoved(ListEvent e) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            ListDataEvent ev = new ListDataEvent(e.getSource(), ListDataEvent.INTERVAL_REMOVED, e.getIndex(), e.getIndex());
+            for (ListDataListener listener : listDataListeners) {
+                listener.intervalRemoved(ev);
+            }
         }
 
         @Override
