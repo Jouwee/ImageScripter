@@ -1,5 +1,6 @@
 package com.jouwee.proto.view;
 
+import com.jouwee.proto.mvc.View;
 import com.jouwee.proto.CommonStates;
 import static com.jouwee.proto.CommonStates.INPUT;
 import com.jouwee.proto.Image;
@@ -21,8 +22,8 @@ import javax.swing.event.ChangeListener;
  * 
  * @author Jouwee
  */
-@ViewMeta(name = "Image viewer")
-public class ImageView extends View<State> implements PropertyChangeListener, CommonStates {
+@ViewMeta(name = "Image viewer", controller = ImageController.class)
+public class ImageView extends View<State, ImageController> implements PropertyChangeListener, CommonStates {
 
     /** Image */
     private JLabel image;
@@ -68,8 +69,7 @@ public class ImageView extends View<State> implements PropertyChangeListener, Co
             inputSlider.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
-                    Input input = (Input) getModel().get(INPUT);
-                    getModel().set(INPUT_IMAGE, input.getFrame(inputSlider.getValue()));
+                    getController().changeInputFrame(inputSlider.getValue());
                 }
             });
         }

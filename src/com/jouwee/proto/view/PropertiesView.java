@@ -1,5 +1,6 @@
 package com.jouwee.proto.view;
 
+import com.jouwee.proto.mvc.View;
 import com.jouwee.proto.Action;
 import com.jouwee.proto.Application;
 import com.jouwee.proto.ExceptionHandler;
@@ -26,8 +27,8 @@ import javax.swing.JPanel;
  * 
  * @author Jouwee
  */
-@ViewMeta(name = "Property Editor")
-public class PropertiesView extends View<Action> implements PropertyChangeListener {
+@ViewMeta(name = "Property Editor", controller = PropertiesController.class)
+public class PropertiesView extends View<Action, PropertiesController> implements PropertyChangeListener {
 
     /**
      * Creates a properties view

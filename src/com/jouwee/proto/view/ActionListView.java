@@ -1,5 +1,6 @@
 package com.jouwee.proto.view;
 
+import com.jouwee.proto.mvc.View;
 import com.jouwee.proto.Action;
 import com.jouwee.proto.ActionList;
 import com.jouwee.proto.Application;
@@ -28,8 +29,8 @@ import org.pushingpixels.substance.api.renderers.SubstanceDefaultListCellRendere
  * 
  * @author Jouwee
  */
-@ViewMeta(name = "Action list")
-public class ActionListView extends View<ActionList> implements Interface {
+@ViewMeta(name = "Action list", controller = ActionListController.class)
+public class ActionListView extends View<ActionList, ActionListController> implements Interface {
 
     /** Preferred action item size */
     private static final Dimension PREFERRED_ACTION_SIZE = new Dimension(150, 50);

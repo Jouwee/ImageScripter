@@ -4,7 +4,7 @@ import com.jouwee.proto.actions.NewProjectAction;
 import com.jouwee.proto.actions.OpenInputAction;
 import com.jouwee.proto.actions.OpenProjectAction;
 import com.jouwee.proto.actions.SaveProjectAction;
-import com.jouwee.proto.view.ViewPanelContainer;
+import com.jouwee.proto.gui.ViewPanelContainer;
 import java.awt.BorderLayout;
 import java.awt.HeadlessException;
 import javax.swing.JFrame;

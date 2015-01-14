@@ -1,15 +1,19 @@
-package com.jouwee.proto.view;
+package com.jouwee.proto.gui;
 
+import com.jouwee.proto.mvc.View;
 import com.jouwee.proto.ExceptionHandler;
 import com.jouwee.proto.Interface;
+import com.jouwee.proto.ViewProvider;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.BoxLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 /**
@@ -21,6 +25,9 @@ public class ViewPanel extends JPanel implements Interface {
     
     /** Property - Current view */
     public static final String PROP_VIEW = "PROP_VIEW";
+    /** Minimum size */
+    private static final Dimension MINIMUM_INFO_SIZE = new Dimension(48, 48);
+    
     /** Property change support */
     private final transient PropertyChangeSupport propertyChangeSupport = new PropertyChangeSupport(this);
     /** View selector */
@@ -51,6 +58,7 @@ public class ViewPanel extends JPanel implements Interface {
      */
     private void setupViewSelector() {
         viewSelector = new ViewSelector();
+        viewSelector.setFocusable(false);
         viewSelector.addItemListener(new ViewSeletorListener());
     }
 
@@ -61,7 +69,8 @@ public class ViewPanel extends JPanel implements Interface {
      */
     private JPanel setupViewInfoPanel() {
         JPanel pViewInfo = new JPanel();
-        pViewInfo.setLayout(new BoxLayout(pViewInfo, BoxLayout.X_AXIS));
+        pViewInfo.setMinimumSize(MINIMUM_INFO_SIZE);
+        pViewInfo.setLayout(new FlowLayout(FlowLayout.LEFT));
         pViewInfo.add(viewSelector);
         return pViewInfo;
     }
@@ -73,6 +82,7 @@ public class ViewPanel extends JPanel implements Interface {
      */
     private void setupViewPanel(JPanel pViewInfo) {
         setLayout(new BorderLayout());
+        setBorder(BorderFactory.createLineBorder(LOWLIGHT_COLOR));
         add(pViewInfo, BorderLayout.SOUTH);
     }
     

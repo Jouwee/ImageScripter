@@ -1,7 +1,9 @@
-package com.jouwee.proto.view;
+package com.jouwee.proto.gui;
 
+import com.jouwee.proto.mvc.View;
 import com.jouwee.proto.ExceptionHandler;
 import com.jouwee.proto.gui.JMultiSplit;
+import com.jouwee.proto.ViewProvider;
 import java.awt.BorderLayout;
 import java.io.IOException;
 import java.io.InputStream;

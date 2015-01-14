@@ -1,7 +1,9 @@
-package com.jouwee.proto.view;
+package com.jouwee.proto.gui;
 
+import com.jouwee.proto.mvc.View;
 import com.jouwee.proto.LocaleBundle;
 import com.jouwee.proto.annotations.ViewMeta;
+import com.jouwee.proto.ViewProvider;
 import java.awt.Color;
 import java.awt.Component;
 import javax.swing.ComboBoxModel;
@@ -34,6 +36,8 @@ public class ViewSelector extends JComboBox<Class<? extends View>> {
 
         /** Selected color */
         private static final Color SELECTED = new Color(0x4D77B3);
+        
+        // TODO: Improve this implementation
         
         @Override
         public Component getListCellRendererComponent(JList<? extends Class> list, Class value, int index, boolean isSelected, boolean cellHasFocus) {

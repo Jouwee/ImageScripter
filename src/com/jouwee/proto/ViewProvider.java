@@ -1,7 +1,13 @@
-package com.jouwee.proto.view;
+package com.jouwee.proto;
 
-import com.jouwee.proto.Application;
-import com.jouwee.proto.Model;
+import com.jouwee.proto.mvc.View;
+import com.jouwee.proto.annotations.ViewMeta;
+import com.jouwee.proto.mvc.Controller;
+import com.jouwee.proto.view.ActionBrowserView;
+import com.jouwee.proto.view.ActionListView;
+import com.jouwee.proto.view.ImageView;
+import com.jouwee.proto.view.PropertiesView;
+import com.jouwee.proto.view.ScriptEditorView;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -69,6 +75,11 @@ public final class ViewProvider {
             IllegalAccessException, NoSuchMethodException, IllegalArgumentException, InvocationTargetException {
         Constructor<T> constructor = viewType.getConstructor(Model.class);
         T instance = constructor.newInstance(Application.getModel());
+        // New controller
+        Controller controller = viewType.getAnnotation(ViewMeta.class).controller().newInstance();
+        controller.setModel(instance.getModel());
+        controller.setView(instance);
+        instance.setController(controller);
         Application.addPropertyChangeListener(Application.PROP_MODEL, instance);
         return instance;
     }

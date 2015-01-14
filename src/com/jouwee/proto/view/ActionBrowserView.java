@@ -1,5 +1,6 @@
 package com.jouwee.proto.view;
 
+import com.jouwee.proto.mvc.View;
 import com.jouwee.proto.ActionProvider;
 import com.jouwee.proto.ExceptionHandler;
 import com.jouwee.proto.Model;
@@ -17,8 +18,8 @@ import javax.swing.JList;
  * 
  * @author Jouwee
  */
-@ViewMeta(name = "Action browser")
-public class ActionBrowserView extends View<Model> {
+@ViewMeta(name = "Action browser", controller = ActionBrowserController.class)
+public class ActionBrowserView extends View<Model, ActionBrowserController> {
 
     /** Swing list to show the actions */
     private JList<Class> list;
@@ -86,13 +87,7 @@ public class ActionBrowserView extends View<Model> {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            try {
-                getModel().getProject().getActionList().add(ActionProvider.getNewInstance(list.getSelectedValue()));
-            } catch(IllegalAccessException | InstantiationException ex) {
-                Map<String, Object> errorInfo = new HashMap<>();
-                errorInfo.put("actionClass", list.getSelectedValue());
-                ExceptionHandler.handle(ex, "Was not able to add an action to the list", errorInfo);
-            }
+            getController().addAction(list.getSelectedValue());
         }
         
     }

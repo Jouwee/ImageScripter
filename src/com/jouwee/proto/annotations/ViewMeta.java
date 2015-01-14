@@ -1,5 +1,6 @@
 package com.jouwee.proto.annotations;
 
+import com.jouwee.proto.mvc.Controller;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -27,5 +28,12 @@ public @interface ViewMeta {
      * @return String
      */
     public String icon() default "";
+    
+    /** 
+     * Controller
+     * 
+     * @return Controller
+     */
+    public Class<? extends Controller> controller();
     
 }

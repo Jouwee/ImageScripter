@@ -1,4 +1,4 @@
-package com.jouwee.proto.view;
+package com.jouwee.proto.mvc;
 
 import com.jouwee.proto.Application;
 import com.jouwee.proto.Model;
@@ -11,11 +11,14 @@ import javax.swing.JComponent;
  *
  * @author Jouwee
  * @param <T> Model type
+ * @param <C> Controller type
  */
-public abstract class View<T> extends JComponent implements PropertyChangeListener {
+public abstract class View<T, C> extends JComponent implements PropertyChangeListener {
 
     /** Model of this view */
     private T model;
+    /** Controller */
+    private C controller;
 
     /**
      * Creates a new view
@@ -57,6 +60,24 @@ public abstract class View<T> extends JComponent implements PropertyChangeListen
      */
     public void setModel(T model) {
         this.model = model;
+    }
+
+    /**
+     * Returns the controller
+     * 
+     * @return C
+     */
+    public C getController() {
+        return controller;
+    }
+
+    /**
+     * Sets the controller 
+     * 
+     * @param controller 
+     */
+    public void setController(C controller) {
+        this.controller = controller;
     }
 
 }
