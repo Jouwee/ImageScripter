@@ -20,7 +20,9 @@ public class ImageController extends Controller<State, ImageView> {
      */
     public void changeInputFrame(int frame) {
         Input input = (Input) getModel().get(INPUT);
-        getModel().set(INPUT_IMAGE, input.getFrame(frame));
+        if (input != null) {
+            getModel().set(INPUT_IMAGE, input.getFrame(frame));
+        }
     }
     
 }

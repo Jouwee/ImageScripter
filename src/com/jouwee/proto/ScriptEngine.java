@@ -1,78 +1,96 @@
 package com.jouwee.proto;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
+import org.mozilla.javascript.Scriptable;
 
 /**
  * Script engine
- * 
+ *
  * @author Jouwee
  */
 public class ScriptEngine {
 
-    /** Script's text */
-    private String text;
-    // TODO: Multiple callbacks
-    private Context cx;
-    private org.mozilla.javascript.Scriptable scope;
-    private Function f;
-    
+    /** Contexts linked with the thread ids */
+    private final Map<Long, Context> contexts;
+    /** Execution scope */
+    private Scriptable scope;
+    /** Compiled functions */
+    private final Map<CallbackHeader, Function> compiledFunctions;
+
     /**
      * Create a new Script
      */
     public ScriptEngine() {
-        text = "function f(x, y, v) {\nreturn v;\n}";
+        contexts = new HashMap<>();
+        compiledFunctions = new HashMap<>();
     }
-    
+
+    /**
+     * Initializes the scripting engine
+     */
+    public void init() {
+        scope = getContext().initStandardObjects();
+        getContext().evaluateString(scope, "var $scope = {}", "<cmd>", 1, null);
+    }
+
     /**
      * Compiles a callback
-     * 
+     *
      * @param header
-     * @param callback 
+     * @param callback
      */
     public void compile(CallbackHeader header, Callback callback) {
         try {
-            
-             cx = Context.enter();
-             scope = cx.initStandardObjects();
-             String body = ScriptProvider.def().getFullBody(callback, header);
-             System.out.println("body: " + body);
-             f = cx.compileFunction(scope, body, "<cmd>", 1, null);
-        } catch(Exception e) {e.printStackTrace();}
+            String body = ScriptProvider.def().getFullBody(callback, header);
+            System.out.println("body: " + body);
+            Function f = getContext().compileFunction(scope, body, "<cmd>", 1, null);
+            compiledFunctions.put(header, f);
+        } catch (Exception e) {
+            ExceptionHandler.handle(e);
+        }
     }
 
     /**
      * Invoke a callback
-     * 
-     * 
+     *
+     *
      * @param header
      * @param callback
      * @param params
-     * @return 
+     * @return Object
      */
     public Object invoke(CallbackHeader header, Callback callback, Object... params) {
         try {
-             return f.call(cx, scope, scope, params);
-        } catch(Exception e) {e.printStackTrace();}
+            return compiledFunctions.get(header).call(getContext(), scope, scope, params);
+        } catch (Exception e) {
+            ExceptionHandler.handle(e);
+        }
         return null;
-    }
-    
-    /**
-     * Returns the script text
-     * 
-     * @return String
-     */
-    public String getText() {
-        return text;
     }
 
     /**
-     * Defines the script text
-     * 
-     * @param text 
+     * Returns the context associated with the current thread
+     *
+     * @return Context
      */
-    public void setText(String text) {
-        this.text = text;
+    public Context getContext() {
+        return getContext(Thread.currentThread().getId());
     }
-    
+
+    /**
+     * Returns the context associated with the {@code threadId}
+     *
+     * @param threadId Thread id
+     * @return Context
+     */
+    public Context getContext(long threadId) {
+        if (!contexts.containsKey(threadId)) {
+            contexts.put(threadId, Context.enter());
+        }
+        return contexts.get(threadId);
+    }
+
 }

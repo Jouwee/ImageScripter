@@ -46,6 +46,7 @@ public class ScriptRunner implements CommonStates {
      */
     private void setupExecution() {
         model.getState().set(WORK_IMAGE, model.getState().get(INPUT_IMAGE));
+        model.getScriptEngine().init();
     }
     
     /**

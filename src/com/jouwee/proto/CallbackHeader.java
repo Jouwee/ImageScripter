@@ -1,5 +1,8 @@
 package com.jouwee.proto;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * Callback header for scripts
  * 
@@ -88,5 +91,38 @@ public class CallbackHeader {
     public Parameter[] getParameters() {
         return parameters;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 19 * hash + Objects.hashCode(this.functionName);
+        hash = 19 * hash + Arrays.deepHashCode(this.parameters);
+        hash = 19 * hash + Objects.hashCode(this.callbackReturn);
+        hash = 19 * hash + Objects.hashCode(this.body);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CallbackHeader other = (CallbackHeader) obj;
+        if (!Objects.equals(this.functionName, other.functionName)) {
+            return false;
+        }
+        if (!Arrays.deepEquals(this.parameters, other.parameters)) {
+            return false;
+        }
+        if (!Objects.equals(this.callbackReturn, other.callbackReturn)) {
+            return false;
+        }
+        return !Objects.equals(this.body, other.body);
+    }
+    
+    
     
 }
