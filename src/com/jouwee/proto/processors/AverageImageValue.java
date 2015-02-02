@@ -9,7 +9,7 @@ import com.jouwee.proto.annotations.ActionMeta;
  * 
  * @author Jouwee
  */
-@ActionMeta(name = "Average image value", category = "math")
+@ActionMeta(name = "Average image value")
 public class AverageImageValue extends Gatherer {
 
     /** Sum of the values */

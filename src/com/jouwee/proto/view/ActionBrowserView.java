@@ -1,17 +1,14 @@
 package com.jouwee.proto.view;
 
 import com.jouwee.proto.mvc.View;
-import com.jouwee.proto.ActionProvider;
-import com.jouwee.proto.ExceptionHandler;
 import com.jouwee.proto.Model;
 import com.jouwee.proto.annotations.ViewMeta;
+import com.jouwee.proto.gui.ActionTypeBrowser;
+import com.jouwee.proto.gui.ActionTypeSelector;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
-import java.util.HashMap;
-import java.util.Map;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
-import javax.swing.JList;
 
 /**
  * Action browser view
@@ -21,8 +18,8 @@ import javax.swing.JList;
 @ViewMeta(name = "Action browser", controller = ActionBrowserController.class)
 public class ActionBrowserView extends View<Model, ActionBrowserController> {
 
-    /** Swing list to show the actions */
-    private JList<Class> list;
+    /** Action browser */
+    private ActionTypeBrowser browser;
     /** Add button */
     private JButton addButton;
     
@@ -40,16 +37,16 @@ public class ActionBrowserView extends View<Model, ActionBrowserController> {
      * Initializes the graphical user interface
      */
     private void initGui() {
-        setupList();
+        setupSelector();
         setupAddButton();
         setupViewAndPlaceComponents();
     }
 
     /**
-     * Sets up the list for the actions
+     * Sets up the selector for the actions
      */
-    private void setupList() {
-        list = new JList(ActionProvider.getAvailableActions().toArray());
+    private void setupSelector() {
+        browser = new ActionTypeBrowser();
     }
     
     /**
@@ -64,7 +61,7 @@ public class ActionBrowserView extends View<Model, ActionBrowserController> {
      */
     private void setupViewAndPlaceComponents() {
         setLayout(new BorderLayout());
-        add(list);
+        add(browser);
         add(addButton, BorderLayout.SOUTH);
     }
 
@@ -87,7 +84,7 @@ public class ActionBrowserView extends View<Model, ActionBrowserController> {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            getController().addAction(list.getSelectedValue());
+            getController().addAction(browser.getSelectedActionType());
         }
         
     }

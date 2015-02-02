@@ -6,13 +6,20 @@
 
 package com.jouwee.proto.gui;
 
+import com.jouwee.proto.Application;
 import com.jouwee.proto.Callback;
 import com.jouwee.proto.CallbackHeader;
+import com.jouwee.proto.ExceptionHandler;
 import com.jouwee.proto.ScriptProvider;
 import java.awt.Font;
+import java.io.IOException;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JTextArea;
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
+import org.fife.ui.rsyntaxtextarea.Theme;
+import org.fife.ui.rtextarea.RTextScrollPane;
 
     /**
      * Callback editor
@@ -26,7 +33,7 @@ public class CallbackEditor extends JComponent {
     /** Callback */
     private final Callback callback;
     /** Actual text editor */
-    private final JTextArea textEditor;
+    private final RSyntaxTextArea textEditor;
         
     /**
      * New callback editor
@@ -39,15 +46,25 @@ public class CallbackEditor extends JComponent {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.header = header;
         this.callback = callback;
-        textEditor = new JTextArea();
-        textEditor.setFont(DEFAULT_FONT);
+        textEditor = new RSyntaxTextArea(20, 60);
+        textEditor.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+        textEditor.setCodeFoldingEnabled(true);
+        textEditor.setAntiAliasingEnabled(true);
         textEditor.setText(callback.getBody());
-        JTextArea headerLabel = new JTextArea(ScriptProvider.def().getHeader(header));
+        try {
+            Theme theme = Theme.load(Application.class.getResourceAsStream("editorTheme.xml"));
+            theme.apply(textEditor);
+        } catch(IOException e) {
+            ExceptionHandler.handle(e);
+        }
+        RTextScrollPane sp = new RTextScrollPane(textEditor);
+        sp.setFoldIndicatorEnabled(true);
+        RSyntaxTextArea headerLabel = new RSyntaxTextArea(ScriptProvider.def().getHeader(header));
         headerLabel.setFont(DEFAULT_FONT);
         headerLabel.setEnabled(false);
         add(headerLabel);
         add(textEditor);
-        JTextArea footerLabel = new JTextArea("}");
+        RSyntaxTextArea footerLabel = new RSyntaxTextArea("}");
         footerLabel.setFont(DEFAULT_FONT);
         footerLabel.setEnabled(false);
         add(footerLabel);

@@ -1,5 +1,6 @@
 package com.jouwee.proto.annotations;
 
+import com.jouwee.proto.Functionality;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -22,10 +23,10 @@ public @interface ActionMeta {
     public String name();
  
     /**
-     * Category
+     * Functionality
      * 
-     * @return String
+     * @return Functionality
      */
-    public String category();
+    public Functionality functionality() default Functionality.UNDEFINED;
     
 }

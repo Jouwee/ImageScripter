@@ -1,6 +1,7 @@
 package com.jouwee.proto.processors;
 
 import com.jouwee.proto.Filter;
+import com.jouwee.proto.Functionality;
 import com.jouwee.proto.Image;
 import com.jouwee.proto.annotations.ActionMeta;
 
@@ -9,7 +10,7 @@ import com.jouwee.proto.annotations.ActionMeta;
  *
  * @author Jouwee
  */
-@ActionMeta(name = "Average grayscale", category = "grayscle")
+@ActionMeta(name = "Average grayscale", functionality = Functionality.GRAYSCALE)
 public class AverageGrayscale extends Filter {
 
     @Override

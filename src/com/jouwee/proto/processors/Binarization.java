@@ -15,7 +15,7 @@ import com.jouwee.proto.properties.BinaryThreshold;
  *
  * @author Jouwee
  */
-@ActionMeta(name = "Binarization", category = "binarization")
+@ActionMeta(name = "Binarization")
 public class Binarization extends Filter {
 
     /** Threshold */
