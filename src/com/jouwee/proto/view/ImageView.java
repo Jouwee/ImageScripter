@@ -69,7 +69,9 @@ public class ImageView extends View<State, ImageController> implements PropertyC
             inputSlider.addChangeListener(new ChangeListener() {
                 @Override
                 public void stateChanged(ChangeEvent e) {
-                    getController().changeInputFrame(inputSlider.getValue());
+                    if (getController() != null) {
+                        getController().changeInputFrame(inputSlider.getValue());
+                    }
                 }
             });
         }

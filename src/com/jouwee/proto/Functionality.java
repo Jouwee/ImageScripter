@@ -15,6 +15,8 @@ public enum Functionality {
     
     /** Transformation */
     TRANSFORMATION("Transformation"),
+    /** Color transformation */
+    COLOR_TRANSFORMATION("Color transformation"),
     /** Grayscale */
     GRAYSCALE("Grayscale"),
     /** Undefined (Default) */

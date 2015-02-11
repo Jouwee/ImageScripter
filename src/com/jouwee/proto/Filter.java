@@ -24,15 +24,15 @@ public abstract class Filter extends Iterator {
     }
     
     @Override
-    public void iteratePixel(int x, int y) {
-        int value = processPixel(x, y);
+    public void iteratePixel(int x, int y, int channel) {
+        int value = processPixel(x, y, channel);
         Object r = invoke(CALLBACK_BEFORE_PIXEL, value);
         if (r instanceof Double) {
             value = ((Double) r).intValue();
         } else {
             value = (Integer) r;
         }
-        getNewImage().setPixelValue(x, y, value);
+        getNewImage().setPixelValue(x, y, channel, value);
     }
     
     /**
@@ -40,8 +40,9 @@ public abstract class Filter extends Iterator {
      * 
      * @param x
      * @param y
+     * @param channel
      * @return int
      */
-    public abstract int processPixel(int x, int y);
+    public abstract int processPixel(int x, int y, int channel);
 
 }

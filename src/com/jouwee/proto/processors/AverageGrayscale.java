@@ -14,7 +14,7 @@ import com.jouwee.proto.annotations.ActionMeta;
 public class AverageGrayscale extends Filter {
 
     @Override
-    public int processPixel(int x, int y) {
+    public int processPixel(int x, int y, int channel) {
         return (getOriginalImage().getPixelValue(x, y, Image.CHANNEL_RED) +
                 getOriginalImage().getPixelValue(x, y, Image.CHANNEL_GREEN) +
                 getOriginalImage().getPixelValue(x, y, Image.CHANNEL_BLUE)) / 3;

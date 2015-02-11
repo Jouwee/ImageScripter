@@ -3,6 +3,7 @@ package com.jouwee.proto;
 import com.jouwee.proto.processors.AverageGrayscale;
 import com.jouwee.proto.processors.AverageImageValue;
 import com.jouwee.proto.processors.Binarization;
+import com.jouwee.proto.processors.InvertColors;
 import com.jouwee.proto.processors.ResizeImage;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,6 +21,7 @@ public class ActionProvider {
 
     // TODO: Find a way to correctly load the available actions
     static {
+        availableActions.add(InvertColors.class);
         availableActions.add(AverageGrayscale.class);
         availableActions.add(Binarization.class);
         availableActions.add(AverageImageValue.class);

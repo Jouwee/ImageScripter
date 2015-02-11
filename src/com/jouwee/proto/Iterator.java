@@ -24,7 +24,9 @@ public abstract class Iterator extends Processor {
         beforeProcessing();
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
-                iteratePixel(x, y);
+                for (int channel = 0; channel < image.getChannels(); channel++) {
+                    iteratePixel(x, y, channel);
+                }
             }
         }
         afterProcessing();
@@ -48,8 +50,9 @@ public abstract class Iterator extends Processor {
      * 
      * @param x 
      * @param y 
+     * @param channel
      */
-    public abstract void iteratePixel(int x, int y);
+    public abstract void iteratePixel(int x, int y, int channel);
 
     /**
      * Get the original image

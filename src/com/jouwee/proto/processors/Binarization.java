@@ -30,8 +30,8 @@ public class Binarization extends Filter {
     }
     
     @Override
-    public int processPixel(int x, int y) {
-        return threshold.apply(getOriginalImage().getPixelValue(x, y, Image.CHANNEL_GRAY));
+    public int processPixel(int x, int y, int channel) {
+        return threshold.apply(getOriginalImage().getPixelValue(x, y, channel));
     }
 
     @Override
