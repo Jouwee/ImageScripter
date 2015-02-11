@@ -12,13 +12,17 @@ import java.util.Map;
  * @author Jouwee
  */
 public abstract class Action {
-    
+
+    /** Enabled */
+    public static final String PROP_ENABLED = "PROP_ENABLED";
     /** Property change support */
     private transient final PropertyChangeSupport propertyChangeSupport;
     /** Callback headers */
     private transient final Map<String, CallbackHeader> callbackHeaders;
     /** Callbacks */
     private final Map<String, Callback> callbacks;
+    /** Enabled */
+    private boolean enabled;
     
     /**
      * New action
@@ -27,6 +31,7 @@ public abstract class Action {
         propertyChangeSupport = new PropertyChangeSupport(this);
         callbackHeaders = new HashMap<>();
         callbacks = new HashMap<>();
+        enabled = true;
     }
     
     /**
@@ -167,5 +172,25 @@ public abstract class Action {
         Callback callback = callbacks.get(callbackKey);
         return Application.getModel().getScriptEngine().invoke(header, callback, parameters);
     }
-    
+
+    /**
+     * Returns if the action is enabled
+     * 
+     * @return boolean
+     */
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    /**
+     * Sets if the action is enabled
+     * 
+     * @param enabled 
+     */
+    public void setEnabled(boolean enabled) {
+        boolean oldEnabled = this.enabled;
+        this.enabled = enabled;
+        propertyChangeSupport.firePropertyChange(PROP_ENABLED, oldEnabled, enabled);
+    }
+
 }

@@ -15,7 +15,6 @@ import java.awt.Font;
 import java.io.IOException;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
-import javax.swing.JTextArea;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -54,20 +53,24 @@ public class CallbackEditor extends JComponent {
         try {
             Theme theme = Theme.load(Application.class.getResourceAsStream("editorTheme.xml"));
             theme.apply(textEditor);
+            RTextScrollPane sp = new RTextScrollPane(textEditor);
+            sp.setFoldIndicatorEnabled(true);
+            RSyntaxTextArea headerLabel = new RSyntaxTextArea(ScriptProvider.def().getHeader(header));
+            headerLabel.setFont(DEFAULT_FONT);
+            headerLabel.setEnabled(false);
+            headerLabel.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+            theme.apply(headerLabel);
+            add(headerLabel);
+            add(textEditor);
+            RSyntaxTextArea footerLabel = new RSyntaxTextArea("}");
+            footerLabel.setFont(DEFAULT_FONT);
+            footerLabel.setEnabled(false);
+            footerLabel.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVASCRIPT);
+            theme.apply(footerLabel);
+            add(footerLabel);
         } catch(IOException e) {
             ExceptionHandler.handle(e);
         }
-        RTextScrollPane sp = new RTextScrollPane(textEditor);
-        sp.setFoldIndicatorEnabled(true);
-        RSyntaxTextArea headerLabel = new RSyntaxTextArea(ScriptProvider.def().getHeader(header));
-        headerLabel.setFont(DEFAULT_FONT);
-        headerLabel.setEnabled(false);
-        add(headerLabel);
-        add(textEditor);
-        RSyntaxTextArea footerLabel = new RSyntaxTextArea("}");
-        footerLabel.setFont(DEFAULT_FONT);
-        footerLabel.setEnabled(false);
-        add(footerLabel);
     }
 
     /**

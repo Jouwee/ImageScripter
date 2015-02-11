@@ -35,8 +35,13 @@ public class ScriptRunner implements CommonStates {
      */
     public void run() {
         setupExecution();
+        if (model.getState().get(WORK_IMAGE) == null) {
+            return;
+        }
         for (Action action : model.getProject().getActionList()) {
-            action.run();
+            if (action.isEnabled()) {
+                action.run();
+            }
         }
         endExecution();
     }

@@ -13,6 +13,8 @@ package com.jouwee.proto;
  */
 public enum Functionality {
     
+    /** Transformation */
+    TRANSFORMATION("Transformation"),
     /** Grayscale */
     GRAYSCALE("Grayscale"),
     /** Undefined (Default) */

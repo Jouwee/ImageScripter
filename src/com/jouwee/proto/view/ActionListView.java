@@ -1,6 +1,5 @@
 package com.jouwee.proto.view;
 
-import com.jouwee.proto.mvc.View;
 import com.jouwee.proto.Action;
 import com.jouwee.proto.ActionList;
 import com.jouwee.proto.Application;
@@ -8,21 +7,26 @@ import com.jouwee.proto.Interface;
 import com.jouwee.proto.Model;
 import com.jouwee.proto.annotations.ActionMeta;
 import com.jouwee.proto.annotations.ViewMeta;
+import com.jouwee.proto.gui.Pill;
+import com.jouwee.proto.gui.PillModel;
+import com.jouwee.proto.gui.PillRenderer;
+import com.jouwee.proto.gui.PillSelectionEvent;
+import com.jouwee.proto.gui.PillSelectionListener;
 import com.jouwee.proto.listeners.ListEvent;
 import com.jouwee.proto.listeners.ListListener;
+import com.jouwee.proto.mvc.View;
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.ListModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import org.pushingpixels.substance.api.renderers.SubstanceDefaultListCellRenderer;
 
 /**
  * Action list view
@@ -32,10 +36,8 @@ import org.pushingpixels.substance.api.renderers.SubstanceDefaultListCellRendere
 @ViewMeta(name = "Action list", controller = ActionListController.class, toolbar = ActionListToolbarView.class)
 public class ActionListView extends View<ActionList, ActionListController> implements Interface {
 
-    /** Preferred action item size */
-    private static final Dimension PREFERRED_ACTION_SIZE = new Dimension(150, 50);
-    /** Swing list to show the actions */
-    private JList<Action> list;
+    /** Action list */
+    private Pill<Action> actions;
     
     /**
      * Creates a new action list view
@@ -52,20 +54,20 @@ public class ActionListView extends View<ActionList, ActionListController> imple
      * Initializes the graphical user interface
      */
     private void initGui() {
-        setupList();
+        setupPills();
         setupViewAndPlaceComponents();
     }
     
     /**
-     * Sets up the list for the actions
+     * Sets up the pills for the actions
      */
-    private void setupList() {
-        list = new JList<Action>(new ActionJListModel());
-        list.setCellRenderer(new ActionCellRenderer());
-        list.addListSelectionListener(new ListSelectionListener() {
+    private void setupPills() {
+        actions = new Pill<>(new ActionPillModel());
+        actions.setRenderer(new ActionCellRendererFactory());
+        actions.addPillSelectionListener(new PillSelectionListener() {
             @Override
-            public void valueChanged(ListSelectionEvent e) {
-                Application.getModel().getState().set("selectedAction", list.getSelectedValue());
+            public void valueChanged(PillSelectionEvent e) {
+                Application.getModel().getState().set("selectedAction", actions.getSelectedValue());
             }
         });
     }
@@ -75,14 +77,14 @@ public class ActionListView extends View<ActionList, ActionListController> imple
      */
     private void setupViewAndPlaceComponents() {
         setLayout(new BorderLayout());
-        add(list);
+        add(actions);
     }
 
     @Override
     public void updateModel(Model model) {
         setModel(model.getProject().getActionList());
-        if (list != null) {
-            list.setModel(new ActionJListModel());
+        if (actions != null) {
+            actions.setModel(new ActionPillModel());
         }
     }
 
@@ -92,35 +94,66 @@ public class ActionListView extends View<ActionList, ActionListController> imple
      * @return Action
      */
     public Action getSelectedAction() {
-        return list.getSelectedValue();
+        return actions.getSelectedValue();
     }
     
     /**
      * List cell renderer for actions
      */
-    private class ActionCellRenderer extends SubstanceDefaultListCellRenderer {
+    private class ActionCellRendererFactory implements PillRenderer<Action> {
 
         @Override
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            Component component = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            if (component instanceof JLabel) {
-                JLabel label = (JLabel) component;
-                // If there is metadata
-                if (value.getClass().isAnnotationPresent(ActionMeta.class)) {
-                    ActionMeta meta = value.getClass().getAnnotation(ActionMeta.class);
-                    label.setText(meta.name());
-                }
-                label.setPreferredSize(PREFERRED_ACTION_SIZE);
-            }
-            return component;
+        public JComponent getComponent(Action value) {
+            return new ActionCellRenderer(value);
         }
 
     }
     
     /**
-     * Returns the action list model
+     * List cell renderer for actions
      */
-    private class ActionJListModel implements ListModel<Action>, ListListener {
+    private class ActionCellRenderer extends JComponent implements ActionListener, PropertyChangeListener {
+
+        /** If the action is enabled */
+        private final JCheckBox enabled;
+        /** Action */
+        private final Action action;
+        
+        /**
+         * New renderer of the action
+         * 
+         * @param value 
+         */
+        @SuppressWarnings("LeakingThisInConstructor")
+        private ActionCellRenderer(Action value) {
+            action = value;
+            action.addPropertyChangeListener(this);
+            setLayout(new BorderLayout());
+            add(new JLabel(value.getClass().getAnnotation(ActionMeta.class).name()));
+            enabled = new JCheckBox();
+            enabled.setSelected(action.isEnabled());
+            enabled.setOpaque(false);
+            enabled.setFocusable(false);
+            enabled.addActionListener(this);
+            add(enabled, BorderLayout.WEST);
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            action.setEnabled(enabled.isSelected());
+        }
+
+        @Override
+        public void propertyChange(PropertyChangeEvent evt) {
+            enabled.setSelected(action.isEnabled());
+        }
+
+    }
+    
+    /**
+     * Returns the action pill model
+     */
+    private class ActionPillModel implements PillModel<Action>, ListListener {
 
         /** List data listeners */
         private final List<ListDataListener> listDataListeners;
@@ -129,7 +162,7 @@ public class ActionListView extends View<ActionList, ActionListController> imple
          * Creates a new action list model
          */
         @SuppressWarnings("LeakingThisInConstructor")
-        public ActionJListModel() {
+        public ActionPillModel() {
             listDataListeners = new ArrayList<>();
             getModel().addListListener(this);
         }
@@ -180,4 +213,5 @@ public class ActionListView extends View<ActionList, ActionListController> imple
         }
         
     }
+    
 }

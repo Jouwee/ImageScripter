@@ -19,8 +19,7 @@ public abstract class Gatherer extends Action {
     }
     
     @Override
-    public void run() {
-        
+    public void run() {        
         // TODO: Not here
         compileCallbacks();
         // Get the work image
@@ -28,7 +27,7 @@ public abstract class Gatherer extends Action {
         // Processes the work image
         process(image);
         // Invokes the callback
-        System.out.println("return: " + invoke(CALLBACK_INFORMATION_GATHERED, getValue()));
+        invoke(CALLBACK_INFORMATION_GATHERED, getValue());
     }
     
     /**

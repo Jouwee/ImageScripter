@@ -10,7 +10,6 @@ import com.jouwee.proto.Action;
 import com.jouwee.proto.ActionProvider;
 import com.jouwee.proto.ActionTypeFilter;
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
@@ -24,14 +23,10 @@ import javax.swing.JScrollPane;
  */
 public class ActionTypeSelector extends JComponent {
 
-    /** Ideal number of columns */
-    private final int COLS = 3;
     /** All the action types that the user can browse through */
     private final List<Class> actionTypes;
-    /** Inner panel, added to the scroll pane */
-    private JPanel innerPanel;
     /** Pill group */
-    private PillGroup<Class> group;
+    private Pill<Class> group;
     /** Filter */
     private ActionTypeFilter filter;
     
@@ -58,26 +53,24 @@ public class ActionTypeSelector extends JComponent {
      */
     private void initGui() {
         setLayout(new BorderLayout());
-        innerPanel = new JPanel();
-        innerPanel.setLayout(new GridLayout(actionTypes.size() / COLS, COLS));
         updatePills();
-        JScrollPane scroll = new JScrollPane(innerPanel);
-        add(scroll);
     }
     
     /**
      * Update the pills to select from
      */
     private void updatePills() {
-        innerPanel.removeAll();
-        group = new PillGroup();
+        group = new Pill();
+        group.setRenderer(new ActionPillRenderer());
+        PillListModel m = (PillListModel) group.getModel();
         for (Class actionType : actionTypes) {
             if (filter.accept(actionType)) {
-                Pill p = new Pill(group, actionType);
-                p.setRenderer(new ActionPillRenderer());
-                innerPanel.add(p);
+                m.add(actionType);
             }
         }
+        removeAll();
+        JScrollPane scroll = new JScrollPane(group);
+        add(scroll);
         revalidate();
     }
     
@@ -87,7 +80,7 @@ public class ActionTypeSelector extends JComponent {
      * @return Class
      */
     public Class<? extends Action> getSelectedActionType() {
-        return group.getSelected().getValue();
+        return group.getSelectedValue();
     }
 
     /**

@@ -45,7 +45,6 @@ public class ScriptEngine {
     public void compile(CallbackHeader header, Callback callback) {
         try {
             String body = ScriptProvider.def().getFullBody(callback, header);
-            System.out.println("body: " + body);
             Function f = getContext().compileFunction(scope, body, "<cmd>", 1, null);
             compiledFunctions.put(header, f);
         } catch (Exception e) {
