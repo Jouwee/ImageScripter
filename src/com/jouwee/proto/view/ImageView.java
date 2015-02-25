@@ -8,6 +8,7 @@ import com.jouwee.proto.Input;
 import com.jouwee.proto.Model;
 import com.jouwee.proto.State;
 import com.jouwee.proto.annotations.ViewMeta;
+import com.jouwee.proto.gui.ImageViewer;
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -26,7 +27,7 @@ import javax.swing.event.ChangeListener;
 public class ImageView extends View<State, ImageController> implements PropertyChangeListener, CommonStates {
 
     /** Image */
-    private JLabel image;
+    private ImageViewer image;
     /** Input slider */
     private JSlider inputSlider;
     
@@ -44,7 +45,7 @@ public class ImageView extends View<State, ImageController> implements PropertyC
      * Initializes the graphical user interface
      */
     private void initGui() {
-        setupImageLabel();
+        setupImageViewer();
         setupInputSlider();
         setupViewAndPlaceComponents();
         getModel().addPropertyChangeListener(OUTPUT_IMAGE, this);
@@ -52,10 +53,10 @@ public class ImageView extends View<State, ImageController> implements PropertyC
     }
     
     /**
-     * Sets up the image label
+     * Sets up the image
      */
-    private void setupImageLabel() {
-        image = new JLabel();
+    private void setupImageViewer() {
+        image = new ImageViewer();
         updateImage();
     }
     
@@ -86,12 +87,10 @@ public class ImageView extends View<State, ImageController> implements PropertyC
      */
     private void updateImage() {
         if (getModel().get(OUTPUT_IMAGE) == null) {
-            image.setIcon(null);
-            image.setText("No input");
+            image.setImage(null);
         } else {
             Image outputImage = (Image) getModel().get(OUTPUT_IMAGE);
-            image.setIcon(new ImageIcon(outputImage.getBufferedImage().getSubimage(0, 0, outputImage.getWidth(), outputImage.getHeight())));
-            image.setText(null);
+            image.setImage(outputImage);
         }
         revalidate();
         repaint();

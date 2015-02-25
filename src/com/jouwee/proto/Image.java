@@ -54,15 +54,11 @@ public class Image {
         this.height = data.getHeight();
         this.channels = CHANNELS_RGBA;
         this.data = new int[channels][height][width];
-        
-        
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 setPixelValue(x, y, data.getRGB(x, y));
             }
         }
-        // TODO: Load image
-        
     }
 
     /**
