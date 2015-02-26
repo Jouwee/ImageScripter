@@ -7,6 +7,7 @@ import com.jouwee.proto.Interface;
 import com.jouwee.proto.Model;
 import com.jouwee.proto.annotations.ActionMeta;
 import com.jouwee.proto.annotations.ViewMeta;
+import com.jouwee.proto.gui.ComponentFactory;
 import com.jouwee.proto.gui.Pill;
 import com.jouwee.proto.gui.PillModel;
 import com.jouwee.proto.gui.PillRenderer;
@@ -16,6 +17,7 @@ import com.jouwee.proto.listeners.ListEvent;
 import com.jouwee.proto.listeners.ListListener;
 import com.jouwee.proto.mvc.View;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -25,6 +27,7 @@ import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
@@ -77,7 +80,7 @@ public class ActionListView extends View<ActionList, ActionListController> imple
      */
     private void setupViewAndPlaceComponents() {
         setLayout(new BorderLayout());
-        add(actions);
+        add(ComponentFactory.scrollPane(actions));
     }
 
     @Override
@@ -114,6 +117,8 @@ public class ActionListView extends View<ActionList, ActionListController> imple
      */
     private class ActionCellRenderer extends JComponent implements ActionListener, PropertyChangeListener {
 
+        /** Altura */
+        private static final int RENDERER_HEIGHT = 60;
         /** If the action is enabled */
         private final JCheckBox enabled;
         /** Action */
@@ -135,6 +140,9 @@ public class ActionListView extends View<ActionList, ActionListController> imple
             enabled.setOpaque(false);
             enabled.setFocusable(false);
             enabled.addActionListener(this);
+            setMinimumSize(new Dimension(0, RENDERER_HEIGHT));
+            setMaximumSize(new Dimension(Integer.MAX_VALUE, RENDERER_HEIGHT));
+            setPreferredSize(new Dimension(Integer.MAX_VALUE, RENDERER_HEIGHT));
             add(enabled, BorderLayout.WEST);
         }
 

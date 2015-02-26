@@ -69,7 +69,7 @@ public class ActionTypeSelector extends JComponent {
             }
         }
         removeAll();
-        JScrollPane scroll = new JScrollPane(group);
+        JScrollPane scroll = ComponentFactory.scrollPane(group);
         add(scroll);
         revalidate();
     }

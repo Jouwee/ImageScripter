@@ -7,6 +7,7 @@ package com.jouwee.proto.gui;
 
 import com.jouwee.proto.Interface;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -70,6 +71,11 @@ public class PillCellContainer extends JComponent implements MouseListener, Inte
     public final void setSelected(boolean selected) {
         this.selected = selected;
         repaint();
+    }
+
+    @Override
+    public Dimension getMaximumSize() {
+        return new Dimension(Integer.MAX_VALUE, getLayout().minimumLayoutSize(this).height);
     }
 
     /**

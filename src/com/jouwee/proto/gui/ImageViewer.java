@@ -68,9 +68,7 @@ public class ImageViewer extends JComponent implements PropertyChangeListener {
      * Sets up the scroll pane
      */
     private void setupScrollPane() {
-        scroll = new JScrollPane();
-        scroll.getVerticalScrollBar().setUnitIncrement(16);
-        scroll.getHorizontalScrollBar().setUnitIncrement(16);
+        scroll = ComponentFactory.scrollPane();
     }
     
     /**
