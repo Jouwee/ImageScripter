@@ -26,11 +26,14 @@ public abstract class Filter extends Iterator {
     @Override
     public void iteratePixel(int x, int y, int channel) {
         int value = processPixel(x, y, channel);
-        Object r = invoke(CALLBACK_BEFORE_PIXEL, value);
-        if (r instanceof Double) {
-            value = ((Double) r).intValue();
-        } else {
-            value = (Integer) r;
+        Object r;
+        if (isCallbackEnabled(CALLBACK_BEFORE_PIXEL)) {
+            r = invoke(CALLBACK_BEFORE_PIXEL, value);
+            if (r instanceof Double) {
+                value = ((Double) r).intValue();
+            } else {
+                value = (Integer) r;
+            }
         }
         getNewImage().setPixelValue(x, y, channel, value);
     }

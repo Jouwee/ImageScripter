@@ -3,6 +3,7 @@ package com.jouwee.proto.view;
 import com.jouwee.proto.mvc.View;
 import com.jouwee.proto.Action;
 import com.jouwee.proto.Application;
+import com.jouwee.proto.CallbackHeader;
 import com.jouwee.proto.Model;
 import com.jouwee.proto.annotations.ViewMeta;
 import com.jouwee.proto.gui.CallbackEditor;
@@ -14,9 +15,8 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractAction;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 /**
  * View for editing scripts
@@ -28,11 +28,11 @@ public class ScriptEditorView extends View<Action, ScriptEditorController> imple
 
     /** Fonte default para o editor */
     private static final Font DEFAULT_FONT = new Font("Consolas", Font.PLAIN, 12);
-    /** Editor */
-    private JPanel editor;
     /** All active editors */
     private final List<CallbackEditor> activeEditors;
-
+    /** Tabbed pane */
+    private JTabbedPane tabs;
+    
     /**
      * Creates a new script editing view
      *
@@ -58,8 +58,8 @@ public class ScriptEditorView extends View<Action, ScriptEditorController> imple
      * Sets up the list for the actions
      */
     private void setupList() {
-        editor = new JPanel();
-        editor.setLayout(new BoxLayout(editor, BoxLayout.Y_AXIS));
+        setLayout(new BorderLayout());
+        tabs = new JTabbedPane();
         buildList();
     }
 
@@ -67,12 +67,13 @@ public class ScriptEditorView extends View<Action, ScriptEditorController> imple
      * Build or rebuild the action list
      */
     private void buildList() {
-        editor.removeAll();
+        tabs.removeAll();
         activeEditors.clear();
         if (getModel() != null) {
             for (String key : getModel().getCallbackKeys()) {
-                CallbackEditor callbackEditor = new CallbackEditor(getModel().getCallbackHeader(key), getModel().getCallback(key));
-                editor.add(callbackEditor);
+                CallbackHeader header = getModel().getCallbackHeader(key);
+                CallbackEditor callbackEditor = new CallbackEditor(header, getModel().getCallback(key));
+                tabs.add(header.getFunctionName(), callbackEditor);
                 activeEditors.add(callbackEditor);
             }
         }
@@ -84,7 +85,7 @@ public class ScriptEditorView extends View<Action, ScriptEditorController> imple
      */
     private void setupViewAndPlaceComponents() {
         setLayout(new BorderLayout());
-        add(editor);
+        add(tabs);
         add(new JButton(new ActionSaveAndRun()), BorderLayout.SOUTH);
     }
 

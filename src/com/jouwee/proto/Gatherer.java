@@ -27,7 +27,9 @@ public abstract class Gatherer extends Action {
         // Processes the work image
         process(image);
         // Invokes the callback
-        invoke(CALLBACK_INFORMATION_GATHERED, getValue());
+        if (isCallbackEnabled(CALLBACK_INFORMATION_GATHERED)) {
+            invoke(CALLBACK_INFORMATION_GATHERED, getValue());
+        }
     }
     
     /**
