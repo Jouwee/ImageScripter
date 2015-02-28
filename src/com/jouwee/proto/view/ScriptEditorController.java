@@ -19,7 +19,7 @@ public class ScriptEditorController extends Controller<Action, ScriptEditorView>
         for (CallbackEditor editor : getView().getActiveEditors()) {
             editor.getCallback().setBody(editor.getText());
         }
-        Application.getModel().getScriptRunner().run();
+        Application.getModel().getScriptRunner().runInBackground();
     }
 
 }

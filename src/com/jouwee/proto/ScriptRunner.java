@@ -4,6 +4,7 @@ import com.jouwee.proto.listeners.ListEvent;
 import com.jouwee.proto.listeners.ListListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.SwingWorker;
 
 /**
  * Script runner
@@ -14,6 +15,10 @@ public class ScriptRunner implements CommonStates {
    
     /** Model */
     private final Model model;
+    /** Thread */
+    private Thread thread;
+    /** Swing worker */
+    private Worker worker;
 
     /**
      * Creates a new Script Runner
@@ -47,6 +52,18 @@ public class ScriptRunner implements CommonStates {
     }
     
     /**
+     * Runs the project in the background
+     */
+    public void runInBackground() {
+        if (worker != null && !worker.isDone()) {
+            worker.setUpdatePending(true);
+            return;
+        }
+        worker = new Worker();
+        worker.execute();
+    }
+    
+    /**
      * Sets up the execution
      */
     private void setupExecution() {
@@ -68,24 +85,68 @@ public class ScriptRunner implements CommonStates {
     
     @Override
         public void propertyChange(PropertyChangeEvent evt) {
-            run();
+            runInBackground();
         }
 
         @Override
         public void itemAdded(ListEvent event) {
-            run();
+            runInBackground();
         }
 
         @Override
         public void itemRemoved(ListEvent event) {
-            run();
+            runInBackground();
         }
 
         @Override
         public void listCleared(ListEvent event) {
-            run();
+            runInBackground();
         }
     
+    }
+    
+    /**
+     * Worker for running the project
+     */
+    private class Worker extends SwingWorker<Object, Object> {
+
+        /** Flag set to true if the project has been modified while this was running, so that it should run once more */
+        private boolean updatePending;
+
+        /**
+         * New worker
+         */
+        public Worker() {
+            updatePending = false;
+        }
+        
+        @Override
+        protected Object doInBackground() throws Exception {
+            do {
+                updatePending = false;
+                ScriptRunner.this.run();
+            } while(updatePending);
+            return null;
+        }
+
+        /**
+         * Returns if it has a pending update
+         * 
+         * @return boolean
+         */
+        public synchronized boolean isUpdatePending() {
+            return updatePending;
+        }
+
+        /**
+         * Sets if it has a pending update
+         * 
+         * @param updatePending 
+         */
+        public synchronized void setUpdatePending(boolean updatePending) {
+            this.updatePending = updatePending;
+        }
+        
     }
 
 }
