@@ -63,7 +63,7 @@ public class BinaryThresholdEditor extends JComponent implements ChangeListener 
     @Override
     public void stateChanged(ChangeEvent e) {
         try {
-            descriptor.getWriteMethod().invoke(BinaryThresholdEditor.this.bean, new BinaryThreshold(slider.getValue()));
+            descriptor.getWriteMethod().invoke(bean, new BinaryThreshold(slider.getValue()));
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             ExceptionHandler.handle(ex);
         }
