@@ -55,7 +55,17 @@ public class ActionList implements Iterable<Action> {
      */
     public void add(Action action) {
         int index = list.size();
-        list.add(action);
+        insert(action, index);
+    }
+
+    /**
+     * Adds an action to the list
+     *
+     * @param action Action
+     * @param index
+     */
+    public void insert(Action action, int index) {
+        list.add(index, action);
         fireItemAdded(action, index);
         for (PropertyChangeListener listener : globalPropertyChangeListeners) {
             action.addPropertyChangeListener(listener);
@@ -64,13 +74,45 @@ public class ActionList implements Iterable<Action> {
     
     /**
      * Removes the specified action
-     * s
+     * 
      * @param action 
      */
     public void remove(Action action) {
         int index = list.indexOf(action);
         list.remove(index);
         fireItemRemoved(action, index);
+    }
+    
+    /**
+     * Move the action up
+     * 
+     * @param action
+     * @return {@code true} if the action was moved (Was not the first)
+     */
+    public boolean moveUp(Action action) {
+        int index = list.indexOf(action);
+        if (index == 0) {
+            return false;
+        }
+        remove(action);
+        insert(action, index - 1);
+        return true;
+    }
+    
+    /**
+     * Move the action Down
+     * 
+     * @param action
+     * @return {@code true} if the action was moved (Was not the last)
+     */
+    public boolean moveDown(Action action) {
+        int index = list.indexOf(action);
+        if (index == list.size() - 1) {
+            return false;
+        }
+        remove(action);
+        insert(action, index + 1);
+        return true;    
     }
 
     /**

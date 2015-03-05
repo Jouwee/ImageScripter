@@ -27,7 +27,6 @@ import java.util.List;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.JScrollPane;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
@@ -98,6 +97,15 @@ public class ActionListView extends View<ActionList, ActionListController> imple
      */
     public Action getSelectedAction() {
         return actions.getSelectedValue();
+    }
+    
+    /**
+     * Sets the selected action
+     * 
+     * @param action 
+     */
+    public void setSelectedAction(Action action) {
+        actions.setSelectedValue(action);
     }
     
     /**

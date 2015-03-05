@@ -21,6 +21,8 @@ public class ActionListToolbarView extends ToolbarView<ActionList, ActionListVie
         super();
         setLayout(new FlowLayout());
         add(new JButton(new RemoveAction()));
+        add(new JButton(new MoveUpAction()));
+        add(new JButton(new MoveDownAction()));
     }
     
     /**
@@ -38,6 +40,44 @@ public class ActionListToolbarView extends ToolbarView<ActionList, ActionListVie
         @Override
         public void actionPerformed(ActionEvent e) {
             getController().removeSelectedAction();
+        }
+        
+    }
+    
+    /**
+     * Move Up action
+     */
+    private class MoveUpAction extends AbstractAction {
+
+        /**
+         * Creates the action
+         */
+        public MoveUpAction() {
+            super("Up");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            getController().moveSelectionUp();
+        }
+        
+    }
+    
+    /**
+     * MoveDown action
+     */
+    private class MoveDownAction extends AbstractAction {
+
+        /**
+         * Creates the action
+         */
+        public MoveDownAction() {
+            super("Down");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            getController().moveSelectionDown();
         }
         
     }

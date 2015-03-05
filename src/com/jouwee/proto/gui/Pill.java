@@ -8,6 +8,8 @@ package com.jouwee.proto.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.event.ListDataEvent;
@@ -25,6 +27,8 @@ public class Pill<T> extends JComponent implements ListDataListener, ActionListe
     private PillModel<T> model;
     /** Pill renderer */
     private PillRenderer renderer;
+    /** Active containers */
+    private List<PillCellContainer> activeContainers;
     /** Selected pill */
     private PillCellContainer selectedCell;
     
@@ -43,6 +47,7 @@ public class Pill<T> extends JComponent implements ListDataListener, ActionListe
     public Pill(PillModel<T> model) {
         super();
         selectedCell = null;
+        activeContainers = new ArrayList<>();
         setModel(model);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setRenderer(new PillDefaultRenderer());
@@ -83,10 +88,12 @@ public class Pill<T> extends JComponent implements ListDataListener, ActionListe
      */
     private void rebuild() {
         removeAll();
+        activeContainers.clear();
         for (int i = 0; i < getModel().getSize(); i++) {
             PillCellContainer cell = new PillCellContainer(getModel().getElementAt(i), renderer);
             cell.addActionListener(this);
             add(cell);
+            activeContainers.add(cell);
         }
         revalidate();
         repaint();
@@ -124,7 +131,7 @@ public class Pill<T> extends JComponent implements ListDataListener, ActionListe
      */
     private int getIndexOf(PillCellContainer cell) {
         for (int i = 0; i < model.getSize(); i++) {
-            if (model.getElementAt(i) == selectedCell) {
+            if (model.getElementAt(i) == cell.getValue()) {
                 return i;
             }
         }
@@ -132,12 +139,26 @@ public class Pill<T> extends JComponent implements ListDataListener, ActionListe
     }
     
     /**
-     * Returns the selected pill
+     * Returns the selected value
      * 
-     * @return Pill
+     * @return T
      */
     public T getSelectedValue() {
         return (T) selectedCell.getValue();
+    }
+    
+    /**
+     * Sets the selected value
+     * 
+     * @param value 
+     */
+    public void setSelectedValue(T value) {
+        for (PillCellContainer cell : activeContainers) {
+            if (cell.getValue() == value) {
+                selectedCell = cell;
+            }
+        }
+        firePillSelectionChanged(getIndexOf(selectedCell));
     }
     
     /**
