@@ -6,13 +6,8 @@
 
 package com.jouwee.proto.properties;
 
-import com.jouwee.proto.Action;
-import com.jouwee.proto.ExceptionHandler;
 import com.jouwee.proto.gui.ValuedComponent;
 import java.awt.Dimension;
-import java.beans.PropertyDescriptor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JTextField;
@@ -33,6 +28,9 @@ public class DimensionEditor extends JComponent implements DocumentListener, Val
     /** Height */
     private JTextField height;
 
+    /**
+     * New editor
+     */
     public DimensionEditor() {
         this(null);
     }

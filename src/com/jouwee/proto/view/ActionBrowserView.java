@@ -4,7 +4,6 @@ import com.jouwee.proto.mvc.View;
 import com.jouwee.proto.Model;
 import com.jouwee.proto.annotations.ViewMeta;
 import com.jouwee.proto.gui.ActionTypeBrowser;
-import com.jouwee.proto.gui.ActionTypeSelector;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
