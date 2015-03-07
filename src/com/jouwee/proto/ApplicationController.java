@@ -61,8 +61,9 @@ public class ApplicationController implements CommonStates {
      */
     public void open() {
         JFileChooser fileChooser = new JFileChooser();
-        fileChooser.showOpenDialog(null);
-        open(fileChooser.getSelectedFile());
+        if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+            open(fileChooser.getSelectedFile());
+        }
     }
     
     /**

@@ -10,7 +10,7 @@ import javax.swing.AbstractAction;
  *
  * @author Jouwee
  */
-public class NewProjectAction extends AbstractAction {
+public class NewProjectAction extends AbstractProjectAction {
 
     /**
      * Creates a new action

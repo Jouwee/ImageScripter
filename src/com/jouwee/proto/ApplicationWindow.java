@@ -7,9 +7,11 @@ import com.jouwee.proto.actions.SaveProjectAction;
 import com.jouwee.proto.gui.ViewPanelContainer;
 import java.awt.BorderLayout;
 import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.KeyStroke;
 
 /**
  * Main application window
@@ -72,8 +74,8 @@ public class ApplicationWindow extends JFrame {
     private JMenu setupProjectMenu() {
         JMenu menu = new JMenu(LocaleBundle.def().getString("menu.project"));
         menu.add(new NewProjectAction());
-        menu.add(new OpenProjectAction());
-        menu.add(new SaveProjectAction());
+        menu.add(new OpenProjectAction()).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
+        menu.add(new SaveProjectAction()).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));;
         return menu;
     }
     
