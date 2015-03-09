@@ -1,7 +1,8 @@
 package com.jouwee.proto.processors;
 
-import com.jouwee.proto.Gatherer;
+import com.jouwee.proto.Functionality;
 import com.jouwee.proto.Image;
+import com.jouwee.proto.IteratorGatherer;
 import com.jouwee.proto.annotations.ActionMeta;
 
 /**
@@ -9,25 +10,26 @@ import com.jouwee.proto.annotations.ActionMeta;
  * 
  * @author Jouwee
  */
-@ActionMeta(name = "Average image value")
-public class AverageImageValue extends Gatherer {
+@ActionMeta(name = "Average image value", functionality = Functionality.IMAGE_INFO)
+public class AverageImageValue extends IteratorGatherer {
 
     /** Sum of the values */
     private long sum;
+    /** Average value */
     private double average;
 
     @Override
-    public void process(Image image) {
+    public void beforeProcessing() {
         sum = 0;
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                iteratePixel(image, x, y);
-            }
-        }
+    }
+
+    @Override
+    public void afterProcessing() {
         average = (double)sum / (double)(image.getWidth() * image.getHeight());
     }
-    
-    public void iteratePixel(Image image, int x, int y) {
+
+    @Override
+    public void iteratePixel(int x, int y) {
         sum += image.getPixelValue(x, y, Image.CHANNEL_GRAY);
     }
 

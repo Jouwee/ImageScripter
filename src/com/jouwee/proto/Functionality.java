@@ -19,6 +19,8 @@ public enum Functionality {
     COLOR_TRANSFORMATION("Color transformation"),
     /** Grayscale */
     GRAYSCALE("Grayscale"),
+    /** Image information */
+    IMAGE_INFO("Image information"),
     /** Undefined (Default) */
     UNDEFINED("Undefined"),
     ;

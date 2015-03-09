@@ -3,7 +3,10 @@ package com.jouwee.proto;
 import com.jouwee.proto.processors.AverageGrayscale;
 import com.jouwee.proto.processors.AverageImageValue;
 import com.jouwee.proto.processors.Binarization;
+import com.jouwee.proto.processors.ContentBounds;
+import com.jouwee.proto.processors.CropImage;
 import com.jouwee.proto.processors.InvertColors;
+import com.jouwee.proto.processors.ResizeCanvas;
 import com.jouwee.proto.processors.ResizeImage;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +29,9 @@ public class ActionProvider {
         availableActions.add(Binarization.class);
         availableActions.add(AverageImageValue.class);
         availableActions.add(ResizeImage.class);
+        availableActions.add(CropImage.class);
+        availableActions.add(ContentBounds.class);
+        availableActions.add(ResizeCanvas.class);
     }
 
     /**

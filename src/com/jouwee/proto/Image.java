@@ -1,5 +1,6 @@
 package com.jouwee.proto;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
@@ -142,6 +143,21 @@ public class Image {
             int v = (data[CHANNEL_RED][y][x] << 16) | (data[CHANNEL_GREEN][y][x] << 8) | (data[CHANNEL_BLUE][y][x]);
             return v;
         }
+    }
+    
+    /**
+     * Returns the pixel as a java.awt.Color object
+     * 
+     * @param x
+     * @param y
+     * @return Color
+     */
+    public Color getPixelColor(int x, int y) {
+        if (channels == CHANNELS_GRAYSCALE) {
+            return new Color(data[CHANNEL_GRAY][y][x], data[CHANNEL_GRAY][y][x], data[CHANNEL_GRAY][y][x]);
+        } else {
+            return new Color(data[CHANNEL_RED][y][x], data[CHANNEL_GREEN][y][x], data[CHANNEL_BLUE][y][x]);
+        }    
     }
     
     /**

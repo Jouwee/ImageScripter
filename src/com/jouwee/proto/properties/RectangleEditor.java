@@ -8,23 +8,29 @@ package com.jouwee.proto.properties;
 
 import com.jouwee.proto.gui.ValuedComponent;
 import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.BoxLayout;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 /**
- * Dimension editor
+ * Rectangle editor
  * 
  * @author Jouwee
  */
-public class DimensionEditor extends JComponent implements DocumentListener, PropertyChangeListener, ValuedComponent<Dimension> {
+public class RectangleEditor extends JComponent implements DocumentListener, PropertyChangeListener, ValuedComponent<Rectangle> {
     
     /** Value */
-    private Dimension value;
+    private Rectangle value;
+    /** x */
+    private JTextField fx;
+    /** y */
+    private JTextField fy;
     /** Width */
     private JTextField width;
     /** Height */
@@ -33,7 +39,7 @@ public class DimensionEditor extends JComponent implements DocumentListener, Pro
     /**
      * New editor
      */
-    public DimensionEditor() {
+    public RectangleEditor() {
         this(null);
     }
     
@@ -43,7 +49,7 @@ public class DimensionEditor extends JComponent implements DocumentListener, Pro
      * @param value
      */
     @SuppressWarnings("LeakingThisInConstructor")
-    public DimensionEditor(Dimension value) {
+    public RectangleEditor(Rectangle value) {
         super();
         this.value = value;
         addPropertyChangeListener("value", this);
@@ -55,9 +61,15 @@ public class DimensionEditor extends JComponent implements DocumentListener, Pro
      * Initializes the graphical user interface
      */
     private void initGui() {
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        setLayout(new GridLayout(0, 2));
         setupFields();
+        add(new JLabel("X", JLabel.RIGHT));        
+        add(fx);        
+        add(new JLabel("Y", JLabel.RIGHT));        
+        add(fy);        
+        add(new JLabel("Width", JLabel.RIGHT));        
         add(width);        
+        add(new JLabel("Height", JLabel.RIGHT));        
         add(height);        
     }
     
@@ -69,6 +81,10 @@ public class DimensionEditor extends JComponent implements DocumentListener, Pro
         width.getDocument().addDocumentListener(this);
         height = new JTextField();
         height.getDocument().addDocumentListener(this);
+        fx = new JTextField();
+        fx.getDocument().addDocumentListener(this);
+        fy = new JTextField();
+        fy.getDocument().addDocumentListener(this);
     }
     
     @Override
@@ -90,32 +106,32 @@ public class DimensionEditor extends JComponent implements DocumentListener, Pro
      * Update the bean
      */
     private void update() {
-        if (!width.getText().isEmpty() && !height.getText().isEmpty()) {
-            setValue(new Dimension(Integer.parseInt(width.getText()), Integer.parseInt(height.getText())));
+        if (!fx.getText().isEmpty() && !fy.getText().isEmpty() && 
+                !width.getText().isEmpty() && !height.getText().isEmpty()) {
+            int ix = Integer.parseInt(fx.getText());
+            int iy = Integer.parseInt(fy.getText());
+            int iw = Integer.parseInt(width.getText());
+            int ih = Integer.parseInt(height.getText());
+            setValue(new Rectangle(ix, iy, iw, ih));
         }
     }
     
     @Override
-    public final Dimension getValue() {
+    public final Rectangle getValue() {
         return value;
     }
     
     @Override
-    public final void setValue(Dimension value) {
-        Dimension oldValue = this.value;
+    public final void setValue(Rectangle value) {
+        Rectangle oldValue = this.value;
         this.value = value;
         firePropertyChange("value", oldValue, value);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (!String.valueOf((int)value.getWidth()).equals(width.getText())) {
-            width.setText(String.valueOf((int)value.getWidth()));
-        }
-        if (!String.valueOf((int)value.getHeight()).equals(height.getText())) {
-            height.setText(String.valueOf((int)value.getHeight()));
-        }
-        
+        width.setText(String.valueOf((int)value.getWidth()));
+        height.setText(String.valueOf((int)value.getHeight()));
     }
     
 }
