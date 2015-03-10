@@ -13,6 +13,8 @@ package com.jouwee.proto;
  */
 public enum Functionality {
     
+    /** All (Used only for filters) */
+    ALL("All"),
     /** Transformation */
     TRANSFORMATION("Transformation"),
     /** Color transformation */

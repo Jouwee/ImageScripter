@@ -48,7 +48,7 @@ public class ResizeImage extends Transformer {
 
     @Override
     public Image buildNewImage() {
-        return new Image(newSize.width, newSize.height);
+        return new Image(newSize.width, newSize.height, getOriginalImage().getChannels());
     }
 
     /**

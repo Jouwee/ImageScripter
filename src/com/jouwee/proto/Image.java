@@ -74,6 +74,20 @@ public class Image {
         this.channels = CHANNELS_RGBA;
         this.data = new int[channels][height][width];
     }
+
+    /**
+     * Creates a new empty image
+     * 
+     * @param width
+     * @param height 
+     * @param channels
+     */
+    public Image(int width, int height, int channels) {
+        this.width = width;
+        this.height = height;
+        this.channels = channels;
+        this.data = new int[channels][height][width];
+    }
     
     /**
      * Returns the width of the image

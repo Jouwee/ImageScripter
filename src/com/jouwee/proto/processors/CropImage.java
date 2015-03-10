@@ -36,7 +36,7 @@ public class CropImage extends Transformer {
 
     @Override
     public Image buildNewImage() {
-        return new Image(newBounds.width - newBounds.x, newBounds.height - newBounds.y);
+        return new Image(newBounds.width - newBounds.x, newBounds.height - newBounds.y, getOriginalImage().getChannels());
     }
 
     /**

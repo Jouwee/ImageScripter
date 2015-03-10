@@ -14,7 +14,7 @@ import java.awt.Point;
  * 
  * @author Jouwee
  */
-@ActionMeta(name = "Crop image", functionality = Functionality.TRANSFORMATION)
+@ActionMeta(name = "Resize Canvas", functionality = Functionality.TRANSFORMATION)
 public class ResizeCanvas extends Transformer {
 
     /** New Bounds */
@@ -52,7 +52,7 @@ public class ResizeCanvas extends Transformer {
 
     @Override
     public Image buildNewImage() {
-        return new Image(newSize.width, newSize.height);
+        return new Image(newSize.width, newSize.height, getOriginalImage().getChannels());
     }
 
     /**
