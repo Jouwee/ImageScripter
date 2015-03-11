@@ -18,7 +18,6 @@ public abstract class Iterator extends Processor {
     
     @Override
     public Image process(Image image) {
-        compileCallbacks();
         originalImage = image;
         newImage = new Image(image.getWidth(), image.getHeight(), image.getChannels());
         beforeProcessing();

@@ -40,8 +40,8 @@ public class ResizeCanvas extends Transformer {
     @Override
     public void iteratePixel(int x, int y) {
         
-        int newX = (pivot.x - newSize.width / 2) - pivot.x + x;
-        int newY = (pivot.y - newSize.height / 2) - pivot.y + y;
+        int newX = x - (pivot.x - newSize.width / 2);
+        int newY = y - (pivot.y - newSize.height / 2);
         
         if (newX < 0 || newX > newSize.width || newY < 0 || newY > newSize.height) {
             return;
