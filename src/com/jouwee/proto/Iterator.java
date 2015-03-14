@@ -20,7 +20,7 @@ public abstract class Iterator extends Processor {
     public Image process(Image image) {
         compileCallbacks();
         originalImage = image;
-        newImage = new Image(image.getWidth(), image.getHeight());
+        newImage = new Image(image.getWidth(), image.getHeight(), image.getChannels());
         beforeProcessing();
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {

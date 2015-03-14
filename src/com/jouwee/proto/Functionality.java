@@ -13,12 +13,16 @@ package com.jouwee.proto;
  */
 public enum Functionality {
     
+    /** All (Used only for filters) */
+    ALL("All"),
     /** Transformation */
     TRANSFORMATION("Transformation"),
     /** Color transformation */
     COLOR_TRANSFORMATION("Color transformation"),
     /** Grayscale */
     GRAYSCALE("Grayscale"),
+    /** Image information */
+    IMAGE_INFO("Image information"),
     /** Undefined (Default) */
     UNDEFINED("Undefined"),
     ;

@@ -10,6 +10,8 @@ import com.jouwee.proto.ActionTypeFilter;
 import com.jouwee.proto.Functionality;
 import com.jouwee.proto.annotations.ActionMeta;
 import java.awt.BorderLayout;
+import java.util.Arrays;
+import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JList;
 import javax.swing.JTextField;
@@ -122,7 +124,8 @@ public class ActionTypeBrowser extends JComponent {
         @Override
         public boolean accept(Class<? extends Action> actionType) {
             ActionMeta meta = actionType.getAnnotation(ActionMeta.class);
-            if (!meta.functionality().equals(functionalityList.getSelectedValue())) {
+            if (functionalityList.getSelectedValue() != Functionality.ALL && 
+                !meta.functionality().equals(functionalityList.getSelectedValue())) {
                 return false;
             }
             if (!meta.name().toLowerCase().matches(".*" + textFilter.getText().toLowerCase() + ".*")) {

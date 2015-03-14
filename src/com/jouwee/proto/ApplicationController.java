@@ -20,7 +20,7 @@ public class ApplicationController implements CommonStates {
     public void newPoject() {
         Application.setModel(new Model());
     }
-    
+
     /**
      * Quick saves the project
      */
@@ -32,7 +32,7 @@ public class ApplicationController implements CommonStates {
             save(project.getProjectSaveFile());
         }
     }
-    
+
     /**
      * Save project with dialog
      */
@@ -41,11 +41,11 @@ public class ApplicationController implements CommonStates {
         fileChooser.showSaveDialog(null);
         save(fileChooser.getSelectedFile());
     }
-    
+
     /**
      * Saves the project to the specified file
-     * 
-     * @param file 
+     *
+     * @param file
      */
     public void save(File file) {
         Gson gson = new GsonBuilder().registerTypeAdapter(Action.class, new InterfaceAdapter<Action>()).create();
@@ -56,7 +56,7 @@ public class ApplicationController implements CommonStates {
             ExceptionHandler.handle(ex, "Error while saving file " + file.getAbsolutePath());
         }
     }
-    
+
     /**
      * Opens the project to the specified file
      */
@@ -66,11 +66,11 @@ public class ApplicationController implements CommonStates {
             open(fileChooser.getSelectedFile());
         }
     }
-    
+
     /**
      * Opens the project to the specified file
-     * 
-     * @param file 
+     *
+     * @param file
      */
     public void open(File file) {
         try {
@@ -86,7 +86,7 @@ public class ApplicationController implements CommonStates {
             ExceptionHandler.handle(ex, "Error while opening file " + file.getAbsolutePath());
         }
     }
-    
+
     /**
      * Select the input
      */
@@ -96,7 +96,7 @@ public class ApplicationController implements CommonStates {
         fileChooser.showOpenDialog(null);
         openInput(fileChooser.getSelectedFiles());
     }
-    
+
     /**
      * Opens the input
      * 

@@ -5,7 +5,7 @@ import java.beans.PropertyChangeSupport;
 
 /**
  * Callback for scripts
- * 
+ *
  * @author Jouwee
  */
 public class Callback implements PropertyChangeBean {
@@ -14,12 +14,12 @@ public class Callback implements PropertyChangeBean {
     public static final String PROP_ENABLED = "enabled";
     /** Property - Body */
     public static final String PROP_BODY = "body";
+    /** PropertyChange support */
+    private final transient PropertyChangeSupport propertyChangeSupport;
     /** Callback enabled */
     private boolean enabled;
     /** Function's default body */
     private String body;
-    /** PropertyChange support */
-    private PropertyChangeSupport propertyChangeSupport;
 
     /**
      * New callback
@@ -30,8 +30,8 @@ public class Callback implements PropertyChangeBean {
 
     /**
      * New callback with default body
-     * 
-     * @param body 
+     *
+     * @param body
      */
     public Callback(String body) {
         this.body = body;
@@ -58,10 +58,10 @@ public class Callback implements PropertyChangeBean {
     public void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
         propertyChangeSupport.removePropertyChangeListener(propertyName, listener);
     }
-    
+
     /**
      * Returns the function's body
-     * 
+     *
      * @return String
      */
     public String getBody() {
@@ -70,8 +70,8 @@ public class Callback implements PropertyChangeBean {
 
     /**
      * Sets the function body
-     * 
-     * @param body 
+     *
+     * @param body
      */
     public void setBody(String body) {
         String oldValue = this.body;
@@ -81,7 +81,7 @@ public class Callback implements PropertyChangeBean {
 
     /**
      * Returns if the callback is enabled
-     * 
+     *
      * @return boolean
      */
     public boolean isEnabled() {
@@ -90,13 +90,13 @@ public class Callback implements PropertyChangeBean {
 
     /**
      * Set if the callback is enabled
-     * 
-     * @param enabled 
+     *
+     * @param enabled
      */
     public void setEnabled(boolean enabled) {
         boolean oldValue = this.enabled;
         this.enabled = enabled;
         propertyChangeSupport.firePropertyChange(PROP_ENABLED, oldValue, enabled);
     }
-    
+
 }

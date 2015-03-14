@@ -4,6 +4,7 @@ import com.jouwee.proto.Action;
 import com.jouwee.proto.ExceptionHandler;
 import com.jouwee.proto.gui.ValuedComponent;
 import java.awt.Dimension;
+import java.awt.Rectangle;
 import java.beans.IntrospectionException;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -26,6 +27,7 @@ public class PropertyEditorFactory {
     static {
         EDITORS = new HashMap<>();
         EDITORS.put(Dimension.class, DimensionEditor.class);
+        EDITORS.put(Rectangle.class, RectangleEditor.class);
         EDITORS.put(BinaryThreshold.class, BinaryThresholdEditor.class);
     }
     
@@ -39,11 +41,8 @@ public class PropertyEditorFactory {
     public static JComponent getEditor(final Action bean, Field property) {
         try {
             final PropertyDescriptor descriptor = new PropertyDescriptor(property.getName(), bean.getClass());
-            JComponent component = null;
+            JComponent component;
             Class editorClass = EDITORS.get(property.getType());
-            
-            System.out.println(editorClass);
-            
             component = (JComponent) editorClass.newInstance();
             if (component != null && component instanceof ValuedComponent) {
                 new EditorWrapper(component, descriptor, bean);

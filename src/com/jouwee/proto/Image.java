@@ -1,5 +1,6 @@
 package com.jouwee.proto;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
@@ -73,6 +74,20 @@ public class Image {
         this.channels = CHANNELS_RGBA;
         this.data = new int[channels][height][width];
     }
+
+    /**
+     * Creates a new empty image
+     * 
+     * @param width
+     * @param height 
+     * @param channels
+     */
+    public Image(int width, int height, int channels) {
+        this.width = width;
+        this.height = height;
+        this.channels = channels;
+        this.data = new int[channels][height][width];
+    }
     
     /**
      * Returns the width of the image
@@ -142,6 +157,21 @@ public class Image {
             int v = (data[CHANNEL_RED][y][x] << 16) | (data[CHANNEL_GREEN][y][x] << 8) | (data[CHANNEL_BLUE][y][x]);
             return v;
         }
+    }
+    
+    /**
+     * Returns the pixel as a java.awt.Color object
+     * 
+     * @param x
+     * @param y
+     * @return Color
+     */
+    public Color getPixelColor(int x, int y) {
+        if (channels == CHANNELS_GRAYSCALE) {
+            return new Color(data[CHANNEL_GRAY][y][x], data[CHANNEL_GRAY][y][x], data[CHANNEL_GRAY][y][x]);
+        } else {
+            return new Color(data[CHANNEL_RED][y][x], data[CHANNEL_GREEN][y][x], data[CHANNEL_BLUE][y][x]);
+        }    
     }
     
     /**

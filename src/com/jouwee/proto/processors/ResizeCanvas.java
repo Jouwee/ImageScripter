@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package com.jouwee.proto.processors;
 
@@ -12,38 +7,47 @@ import com.jouwee.proto.Transformer;
 import com.jouwee.proto.annotations.ActionMeta;
 import com.jouwee.proto.annotations.Property;
 import java.awt.Dimension;
+import java.awt.Point;
 
 /**
- * Resize image
+ * Resize canvas
  * 
  * @author Jouwee
  */
-@ActionMeta(name = "Resize image", functionality = Functionality.TRANSFORMATION)
-public class ResizeImage extends Transformer {
+@ActionMeta(name = "Resize Canvas", functionality = Functionality.TRANSFORMATION)
+public class ResizeCanvas extends Transformer {
 
-    /** New size */
-    @Property(name = "New size")
+    /** New Bounds */
+    @Property(name = "New Bounds")
     private Dimension newSize;
-    /** Horizontal scale */
-    private float horizontalScale;
-    /** Vertical scale */
-    private float verticalScale;
-    
-    public ResizeImage() {
+    /** Center point */
+    private Point pivot;
+
+    /**
+     * New resize canvas transformer
+     */
+    public ResizeCanvas() {
         super();
         newSize = new Dimension(100, 100);
     }
 
     @Override
     public Image process(Image image) {
-        horizontalScale = (float)newSize.width / (float)image.getWidth();
-        verticalScale = (float)newSize.height / (float)image.getHeight();
+        pivot = new Point(image.getWidth() / 2, image.getHeight()/ 2);
         return super.process(image);
     }
     
     @Override
     public void iteratePixel(int x, int y) {
-        getNewImage().setPixelValue((int)Math.floor(x * horizontalScale), (int)Math.floor(y * verticalScale), getOriginalImage().getPixelValue(x, y));
+        
+        int newX = (pivot.x - newSize.width / 2) - pivot.x + x;
+        int newY = (pivot.y - newSize.height / 2) - pivot.y + y;
+        
+        if (newX < 0 || newX > newSize.width || newY < 0 || newY > newSize.height) {
+            return;
+        }
+        
+        getNewImage().setPixelValue(newX, newY, getOriginalImage().getPixelValue(x, y));
     }
 
     @Override
@@ -52,7 +56,7 @@ public class ResizeImage extends Transformer {
     }
 
     /**
-     * Returns the new image size
+     * Returns the new bounds
      * 
      * @return Rectangle
      */
@@ -61,14 +65,14 @@ public class ResizeImage extends Transformer {
     }
 
     /**
-     * Sets the new size
+     * Sets the new bounds
      * 
      * @param newSize 
      */
     public void setNewSize(Dimension newSize) {
         Dimension oldValue = this.newSize;
         this.newSize = newSize;
-        getPropertyChangeSupport().firePropertyChange("newSize", oldValue, newSize);
+        getPropertyChangeSupport().firePropertyChange("newBounds", oldValue, newSize);
     }
     
 }
