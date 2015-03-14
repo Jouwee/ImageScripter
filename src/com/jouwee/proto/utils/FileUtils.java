@@ -40,4 +40,34 @@ public class FileUtils {
         }
     }
     
+    /**
+     * Checks if a path exists
+     * 
+     * @param path
+     * @return Path
+     */
+    public static boolean exists(String path) {
+        return new File(path).exists();
+    }
+    
+    /**
+     * Creates a directory in case it doesn't exists
+     * 
+     * @param path 
+     */
+    public static void mkdirIfNotExists(String path) {
+        if (!new File(path).exists()) {
+            mkdir(path);
+        }
+    }
+    
+    /**
+     * Creates a directory
+     * 
+     * @param path 
+     */
+    public static void mkdir(String path) {
+        new File(path).mkdir();
+    }
+    
 }

@@ -75,7 +75,12 @@ public class ApplicationWindow extends JFrame {
         JMenu menu = new JMenu(LocaleBundle.def().getString("menu.project"));
         menu.add(new NewProjectAction());
         menu.add(new OpenProjectAction()).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK));
-        menu.add(new SaveProjectAction()).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));;
+        JMenu recent = new JMenu(LocaleBundle.def().getString("menu.project.openRecent"));
+        for (String file : Application.getPreferences().getRecentProjects()) {
+            recent.add(new OpenProjectAction(file));
+        }
+        menu.add(recent);
+        menu.add(new SaveProjectAction()).setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.CTRL_DOWN_MASK));
         return menu;
     }
     
@@ -87,6 +92,11 @@ public class ApplicationWindow extends JFrame {
     private JMenu setupInputMenu() {
         JMenu menu = new JMenu(LocaleBundle.def().getString("menu.input"));
         menu.add(new OpenInputAction());
+        JMenu recent = new JMenu(LocaleBundle.def().getString("menu.input.openRecent"));
+        for (String file : Application.getPreferences().getRecentInputs()) {
+            recent.add(new OpenInputAction(file));
+        }
+        menu.add(recent);
         return menu;
     }
     

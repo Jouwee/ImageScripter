@@ -20,6 +20,8 @@ public class Application {
     public static final String PROP_MODEL = "PROP_MODEL";
     /** Current model for the application */
     private static Model model;
+    /** User preferences */
+    private static Preferences preferences;
     /** Application controller */
     private static ApplicationController controller;
     /** Property change support */
@@ -33,6 +35,8 @@ public class Application {
     public static void main(String[] args) {
         controller = new ApplicationController();
         propertyChangeSupport = new PropertyChangeSupport(controller);
+        // Load the user preferences
+        preferences = controller.loadPreferences();
         // Creates the model
         setModel(new Model());
         // Sets up the Look and Feel for the application
@@ -150,6 +154,15 @@ public class Application {
      */
     public static ApplicationController getController() {
         return controller;
+    }
+
+    /**
+     * Return the user's preferences
+     * 
+     * @return Preferences
+     */
+    public static Preferences getPreferences() {
+        return preferences;
     }
 
 }
