@@ -18,7 +18,6 @@ public abstract class IteratorGatherer extends Gatherer {
     
     @Override
     public void process(Image image) {
-        compileCallbacks();
         this.image = image;
         beforeProcessing();
         for (int y = 0; y < image.getHeight(); y++) {

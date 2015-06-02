@@ -19,9 +19,7 @@ public abstract class Gatherer extends Action {
     }
     
     @Override
-    public void run() {        
-        // TODO: Not here
-        compileCallbacks();
+    public void doRun() {        
         // Get the work image
         Image image = (Image) Application.getModel().getState().get("workImage");
         // Processes the work image

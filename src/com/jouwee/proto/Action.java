@@ -15,6 +15,8 @@ public abstract class Action implements PropertyChangeBean {
 
     /** Enabled */
     public static final String PROP_ENABLED = "PROP_ENABLED";
+    /** Callback - Initialize */
+    private static final String CALLBACK_INITIALIZE = "initialize";
     /** Property change support */
     private transient final PropertyChangeSupport propertyChangeSupport;
     /** Callback headers */
@@ -32,12 +34,24 @@ public abstract class Action implements PropertyChangeBean {
         callbackHeaders = new HashMap<>();
         callbacks = new HashMap<>();
         enabled = true;
+        registerCallback(new CallbackHeader(CALLBACK_INITIALIZE, new Parameter("value", Object.class, "Initialize")), new Callback());
     }
     
     /**
      * Runs the action
      */
-    public abstract void run();
+    public void run() {
+        compileCallbacks();
+        if (isCallbackEnabled(CALLBACK_INITIALIZE)) {
+            invoke(CALLBACK_INITIALIZE);
+        }
+        doRun();
+    }
+
+    /**
+     * Runs the action
+     */
+    public abstract void doRun();
     
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -74,7 +88,7 @@ public abstract class Action implements PropertyChangeBean {
      * @param header
      * @param callback 
      */
-    protected void registerCallback(CallbackHeader header, Callback callback) {
+    protected final void registerCallback(CallbackHeader header, Callback callback) {
         callbackHeaders.put(header.getFunctionName(), header);
         callbacks.put(header.getFunctionName(), callback);
     }
@@ -130,7 +144,7 @@ public abstract class Action implements PropertyChangeBean {
         if (!callback.isEnabled()) {
             throw new RuntimeException("Calling a disabled callback! The call to invoke should be conditioned!");
         }
-        return Application.getModel().getScriptEngine().invoke(header, callback, parameters);
+        return Application.getModel().getScriptEngine().invoke(this, header, callback, parameters);
     }
     
     /**

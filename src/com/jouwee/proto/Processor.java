@@ -8,7 +8,7 @@ package com.jouwee.proto;
 public abstract class Processor extends Action {
 
     @Override
-    public void run() {
+    public void doRun() {
 
         // TODO: Should get it from somewhere else
 
@@ -16,7 +16,6 @@ public abstract class Processor extends Action {
         Image image = (Image) Application.getModel().getState().get("workImage");
         // Processes and save the work image
         Application.getModel().getState().set("workImage", process(image));
-        
         
     }
 

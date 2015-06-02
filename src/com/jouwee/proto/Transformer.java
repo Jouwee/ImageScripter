@@ -20,7 +20,6 @@ public abstract class Transformer extends Processor {
     
     @Override
     public Image process(Image image) {
-        compileCallbacks();
         originalImage = image;
         newImage = buildNewImage();
         for (int y = 0; y < image.getHeight(); y++) {

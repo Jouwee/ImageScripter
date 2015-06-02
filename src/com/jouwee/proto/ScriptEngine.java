@@ -17,6 +17,8 @@ public class ScriptEngine {
     private final Map<Long, Context> contexts;
     /** Execution scope */
     private Scriptable scope;
+    /** Update scope function */
+    private Function updateScopeFunction;
     /** Compiled functions */
     private final Map<CallbackHeader, Function> compiledFunctions;
 
@@ -34,6 +36,7 @@ public class ScriptEngine {
     public void init() {
         scope = getContext().initStandardObjects();
         getContext().evaluateString(scope, "var $scope = {}", "<cmd>", 1, null);
+        updateScopeFunction = getContext().compileFunction(scope, "function updateScope(action) {$scope.action = action;}", "<cmd>", 1, null);
     }
 
     /**
@@ -55,14 +58,17 @@ public class ScriptEngine {
     /**
      * Invoke a callback
      *
-     *
+     * @param actionScope
      * @param header
      * @param callback
      * @param params
      * @return Object
      */
-    public Object invoke(CallbackHeader header, Callback callback, Object... params) {
+    public Object invoke(Action actionScope, CallbackHeader header, Callback callback, Object... params) {
         try {
+            
+            updateScopeFunction.call(getContext(), scope, scope, new Object[] {actionScope});
+            
             return compiledFunctions.get(header).call(getContext(), scope, scope, params);
         } catch (Exception e) {
             ExceptionHandler.handle(e);

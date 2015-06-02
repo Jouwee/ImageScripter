@@ -1,5 +1,8 @@
 package com.jouwee.proto;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.logging.Level;
@@ -32,7 +35,20 @@ public class Application {
      *
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws AWTException, InterruptedException {
+        
+        Robot r = new Robot();
+        r.delay(3000);
+        r.mouseMove(930, 500);
+        for (int i = 0; i < 100; i++) {
+            r.mousePress(InputEvent.BUTTON1_MASK);
+            r.delay(20);
+            r.mouseRelease(InputEvent.BUTTON1_MASK);
+            r.delay(20);
+        }
+        
+        
+        if(true) return;
         controller = new ApplicationController();
         propertyChangeSupport = new PropertyChangeSupport(controller);
         // Load the user preferences
